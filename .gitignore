@@ -1,3 +1,9 @@
+# notebook
+.ipynb_checkpoints
+
+# OS X stuff
+*.DS_Store
+
 # History files
 .Rhistory
 .Rapp.history
