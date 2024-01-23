@@ -1,1 +1,1 @@
-# pubmed_api_wrapper
+# covid19_api_wrapper
