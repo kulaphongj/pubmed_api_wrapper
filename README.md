@@ -1,1 +1,1 @@
-# covid19_api_wrapper
+# Yelp API Wrapper
