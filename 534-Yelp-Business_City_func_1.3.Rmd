@@ -20,7 +20,7 @@ Business_City <- function(city, category=NULL, limit='20') {
   domain <- "https://api.yelp.com/v3"
   
   # Define the Authorization token
-  token <- "Bearer Q5ekP4HqSoGNGJul1cdaGtWjQ04GgDGV8acu1kCHbZDRM5wmhKilTcV_5_JRRzlanUBZlxrWbsviCFdgOPouOo03KfMhv6Mlva0Nptskt7pgqKo_lh5qv0rJywywZXYx"
+  token <- "Bearer <<<<ENTER YOUR API KEY HERE>>>"
   
   # Create a list of cities to select from
   cities <- c('Kelowna', 'Penticton', 'Red Deer', 'Edmonton', 'Calgary', 'Vancouver')
@@ -210,7 +210,7 @@ Business_Cities <- function(cities, category=NULL, limit='20') {
   domain <- "https://api.yelp.com/v3"
   
   # Define the Authorization token
-  token <- "Bearer Q5ekP4HqSoGNGJul1cdaGtWjQ04GgDGV8acu1kCHbZDRM5wmhKilTcV_5_JRRzlanUBZlxrWbsviCFdgOPouOo03KfMhv6Mlva0Nptskt7pgqKo_lh5qv0rJywywZXYx"
+  token <- "Bearer <<<<ENTER YOUR API KEY HERE>>>"
   
   # Create an empty list to store results for each city
   city_results <- list()
@@ -285,7 +285,7 @@ Business_Cities <- function(cities, category=NULL, limit='20') {
   domain <- "https://api.yelp.com/v3"
   
   # Define the Authorization token
-  token <- "Bearer Q5ekP4HqSoGNGJul1cdaGtWjQ04GgDGV8acu1kCHbZDRM5wmhKilTcV_5_JRRzlanUBZlxrWbsviCFdgOPouOo03KfMhv6Mlva0Nptskt7pgqKo_lh5qv0rJywywZXYx"
+  token <- "Bearer <<<<ENTER YOUR API KEY HERE>>>"
   
   # Create an empty list to store results for each city
   city_results <- list()
@@ -492,7 +492,7 @@ Business_Cities <- function(cities, category=NULL, limit='20') {
   domain <- "https://api.yelp.com/v3"
   
   # Define the Authorization token
-  token <- "Bearer Q5ekP4HqSoGNGJul1cdaGtWjQ04GgDGV8acu1kCHbZDRM5wmhKilTcV_5_JRRzlanUBZlxrWbsviCFdgOPouOo03KfMhv6Mlva0Nptskt7pgqKo_lh5qv0rJywywZXYx"
+  token <- "Bearer <<<<ENTER YOUR API KEY HERE>>>"
   
   # Create an empty list to store results for each city
   city_results <- list()
