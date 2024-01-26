@@ -1,0 +1,30 @@
+---
+title: "Daily_Report_KulaphongJ"
+author: "Kulaphong Jitareerat"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+Date: 2024/01/26
+- Developed geo-heat map of price plots.
+
+Date: 2024/01/25  
+- Wrapped up ideas and wrote a proposal.
+- Studied how to plot heat-map on a map.
+
+Date: 2024/01/24  
+- Explored Yelp APIs.  
+- Tested Yelp APIs.  
+- brainstormed ideas for wrapping Yelp APIs.  
+
+Date: 2024/01/23  
+- Explored Covid-19 APIs.  
+
+Date: 2024/01/17   
+- Explored PubMed APIs.  
+- brainstormed ideas for wrapping PubMed.  
+
+Date: 2024/01/15  
+- Explored APIs.  
+
+
