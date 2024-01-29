@@ -1,0 +1,38 @@
+---
+title: "Project Log"
+author: "Nijiati Abulizi"
+date: "2024-01-25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+**Jan 16:**
+- Explored various APIs.
+
+**Jan 18:**
+- Explored PubMed API.
+
+**Jan 22:** 
+- Explored the CovidTracker API.
+
+**Jan 24:** 
+- Explored the Yelp API.
+- Tested the Yelp API.
+- Brainstormed on R package ideas.
+
+**Jan 25:**
+- Worked on the project proposal (searchBusinesses and create word cloud).
+
+**Jan 27-28:**
+- Worked on the SearchBusiness function.
+- Worked on the GetAllBusiness function.
+- Worked on the Create_Word_Cloud function.
+
+
+
+
