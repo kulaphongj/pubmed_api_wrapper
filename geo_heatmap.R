@@ -1,19 +1,20 @@
 library(httr)
 library(jsonlite)
 library(dplyr)
-
+library(tools)
+library(plotly)
 
 # Define the main domain of the url
 domain <- "https://api.yelp.com/v3"
 
 # Define the Authorization token
-token <- ""
+# token <- ""
 
 # Create a dictionary to hold the parameters for the API request
 params <- list(
-  location = 'Kelowna',
-  categories = 'rehab',
-  term = 'clinic',
+  location = 'Vancouver',
+  categories = 'restaurant',
+  term = 'italian',
   sort_by = 'best_match',
   limit = 50
 )
@@ -70,35 +71,92 @@ df_ratings$price_factor <- price_factors[df_ratings$price]
 df_ratings$price_factor[is.na(df_ratings$price_factor)] <- 0.1
 
 
-# ============================================================================================================
+# GeoHeatmap ============================================================================================================
+#' Generate a geographic heatmap using Plotly
+#'
+#' This function creates a geographic heatmap using the Plotly library in R. It takes a dataframe
+#' with latitude, longitude, and other relevant data, and produces an interactive map.
+#'
+#' @param df_loc A dataframe containing location data, including latitude, longitude, and other factors.
+#' @param factor_plot The factor to be represented by the heatmap.
+#'
+#' @return A Plotly interactive heatmap.
+#'
+#' @examples
+#' \dontrun{
+#'   # Example usage
+#'   heatmap <- geo_heatmap(df, "price_factor")
+#'   plot(heatmap)
+#' }
+#'
+#' @import plotly
+#' @import dplyr
+#' @import stringr
+#' @import tools
+geo_heatmap <- function(df_loc, factor_plot) {
+  
+  # adjust ratio of point on the map based on the maximum value of factor
+  max_val <- max(df_loc[[factor_plot]])
+  if (max_val<=4){
+    ratio_size <- 0.6/max_val  
+  }else if (max_val>10){
+    ratio_size <- max_val/50
+  }else{
+    ratio_size <- 0.7/max_val
+  }
 
-library(plotly)
+  # Clean string
+  factor_plot_clean <- toTitleCase(gsub("_", " ", factor_plot))
+  title_name = paste(params$term, params$categories, "in", params$location, "by", factor_plot_clean)
+  title_name_upperfirst <- toTitleCase(title_name)
+  
+  # Plot graph
+  fig <- plot_ly(
+    data = df_loc,
+    lat = ~latitude,
+    lon = ~longitude,
+    mode = 'markers',
+    marker = list(
+      size = ~get(factor_plot),  # Use get() to dynamically access the specified column
+      sizemode = 'diameter',
+      sizeref = ratio_size,  # Set sizeref based on the maximum value of the factor_plot column
+      sizemin = 5,
+      color = ~get(factor_plot),
+      colorscale = 'Viridis',
+      colorbar = list(title = paste(factor_plot_clean))
+    ),
+    text = ~paste("Name: ", name, "<br>", factor_plot_clean, ":",
+                  ifelse(get(factor_plot) == 0.1, "Unknown", get(factor_plot))),
+    hoverinfo = "text",  # remove latitude and longitude in the tooltips
+    type = 'scattermapbox'
+  )
+  
+  # Plot Map layout
+  fig <- fig %>%
+    layout(
+      mapbox = list(
+        style = 'carto-positron',  #  Can change to 'open-street-map'
+        zoom = 10,
+        center = list(lon = mean(df_loc$longitude, na.rm=TRUE), lat = mean(df_loc$latitude, na.rm=TRUE))
+      ),
+      title = title_name_upperfirst
+    ) 
+  
+  return(fig) 
+}
 
-fig <- plot_ly(
-  data = df_ratings,
-  lat = ~latitude,
-  lon = ~longitude,
-  mode = 'markers',
-  marker = list(
-    size = ~price_factor,  # Use the formula ~price_factor to reference the column
-    sizemode = 'diameter',  # Set sizemode to 'diameter' for direct control over marker size
-    sizeref = 0.1,
-    sizemin = 5,
-    color = ~price_factor,
-    colorscale = 'Viridis',
-    colorbar = list(title = 'Price Factor')
-  ),
-  text = ~paste("Name: ", name, "<br>Price Factor: ", price_factor),
-  type = 'scattermapbox'
-) 
+# call function
+test <-  df_ratings[df_ratings$review_count<500, ]
+test <- df_ratings
 
-fig <- fig %>%
-  layout(
-    mapbox = list(
-      style = 'open-street-map',
-      zoom = 10,
-      center = list(lon = mean(df_ratings$longitude, na.rm=TRUE), lat = mean(df_ratings$latitude, na.rm=TRUE))
-    )
-  ) 
+fig_geo_heat <- geo_heatmap(test, factor_plot='price_factor')
+fig_geo_heat
 
-fig
+
+fig_geo_heat <- geo_heatmap(test, factor_plot='rating')
+fig_geo_heat
+
+
+fig_geo_heat <- geo_heatmap(test, factor_plot='review_count')
+fig_geo_heat
+
