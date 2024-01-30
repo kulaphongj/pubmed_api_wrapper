@@ -33,6 +33,14 @@ knitr::opts_chunk$set(echo = TRUE)
 - Worked on the GetAllBusiness function.
 - Worked on the Create_Word_Cloud function.
 
+**Jan 29:**
+- Split the WordCloud creation function into 3 separate functions.
+- Worked on 2 main search functions and the word cloud creation function.
+- Started working on testing the word cloud creation function.
+
+
+
+
 
 
 
