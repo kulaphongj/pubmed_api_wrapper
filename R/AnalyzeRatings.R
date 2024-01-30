@@ -1,19 +1,13 @@
-
+library(jsonlite)
+library(magrittr)
 
 
 # Assign API key to variable beforehand for security purposes using Base R
 # Set your API key as an environmental variable IN CURRENT R SESSION ONLY
-Sys.setenv(YELP_API = "<<< ENTER YOUR API KEY HERE >>>")
+Sys.setenv(YELP_API = "<<<ENTER YOUR API KEY HERE>>>")
 
 # Extract the value of the YELP_API environment variable
 yelp_api_key <- Sys.getenv("YELP_API")
-
-# Check if the variable is set
-if (nzchar(yelp_api_key)) {
-  cat("YELP_API environment variable value:", yelp_api_key, "\n")
-} else {
-  cat("YELP_API environment variable is not set.\n")
-}
 
 
 
@@ -70,12 +64,19 @@ AnalyzeRatings <- function(cities, category = NULL, limit = '20') {
     df_businesses <- as.data.frame(raw_data)
     
     # Select the columns of interest
-    df_ratings <- df_businesses %>%
-      dplyr::select(name, review_count, rating, price)
-    
-    # Convert price column to factor and factorize the values
-    df_ratings$price_factor <- as.factor(df_ratings$price)
-    levels(df_ratings$price_factor) <- c("$" = 1, "$$" = 2, "$$$" = 3, "nan" = NA)
+    if ('price' %in% names(df_businesses)) {
+      df_ratings <- df_businesses %>%
+        dplyr::select(name, review_count, rating, price)
+      
+      # Convert price column to factor and factorize the values
+      df_ratings$price_factor <- as.factor(df_ratings$price)
+      levels(df_ratings$price_factor) <- c("$" = 1, "$$" = 2, "$$$" = 3, "nan" = NA)
+    } else {
+      # If 'price' column doesn't exist, print a message or load remaining columns
+      # print("Price data not available for this category.")
+      df_ratings <- df_businesses %>%
+        dplyr::select(name, review_count, rating)
+    }
     
     # Store dataframe for each city
     city_results[[city]] <- df_ratings
@@ -91,8 +92,8 @@ AnalyzeRatings <- function(cities, category = NULL, limit = '20') {
 
 
 # Example usage with cities
-cities <- c('Kelowna', 'Penticton', 'Red Deer', 'Edmonton', 'Calgary', 'Vancouver', 'Toronto', 'Portland', 'New York City', 'San Francisco')
-result <- AnalyzeRatings(cities, 'food', 20)
+cities <- c('Kelowna', 'Penticton', 'Red Deer')
+result <- AnalyzeRatings(cities, 'golf', 33)
 #View(result)
 #View(result$combined_df)
 #View(result$parameters)
