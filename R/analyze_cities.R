@@ -1,6 +1,9 @@
 library(jsonlite)
 library(magrittr)
-
+library(purrr)
+library(httr)
+library(stringr)
+library(plotly)
 
 # Assign API key to variable beforehand for security purposes using Base R
 # Set your API key as an environmental variable IN CURRENT R SESSION ONLY
@@ -9,15 +12,13 @@ Sys.setenv(YELP_API = "<<<ENTER YOUR API KEY HERE>>>")
 # Extract the value of the YELP_API environment variable
 yelp_api_key <- Sys.getenv("YELP_API")
 
-
-
 # Obtain the API key from the environmental variable & assign variable locally
 api_key <- Sys.getenv("YELP_API")
 api_key
 
 
 
-AnalyzeRatings <- function(cities, category = NULL, limit = '20') {
+analyze_cities <- function(cities, category = NULL, limit = '20') {
   # Define the main domain of the url
   domain <- "https://api.yelp.com/v3"
   
@@ -56,7 +57,7 @@ AnalyzeRatings <- function(cities, category = NULL, limit = '20') {
     }
     
     # Extract the requested data
-    raw_data <- httr::content(response, "text") %>%
+    raw_data <- httr::content(response, encoding = "UTF-8", as = "text") %>%
       jsonlite::fromJSON(simplifyVector = TRUE) %>%
       `[[`("businesses")
     
@@ -92,16 +93,13 @@ AnalyzeRatings <- function(cities, category = NULL, limit = '20') {
 
 
 # Example usage with cities
-cities <- c('Kelowna', 'Penticton', 'Red Deer')
-result <- AnalyzeRatings(cities, 'golf', 33)
+cities <- c('Kelowna')
+result <- analyze_cities(cities, 'food', 33)
 #View(result)
 #View(result$combined_df)
 #View(result$parameters)
 
 
-
-library(stringr)
-library(plotly)
 
 # Extract category from parameters
 category <- str_to_title(result$parameters$category)
