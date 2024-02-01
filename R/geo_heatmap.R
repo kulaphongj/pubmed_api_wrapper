@@ -4,72 +4,6 @@ library(dplyr)
 library(tools)
 library(plotly)
 
-# # Define the main domain of the url
-# domain <- "https://api.yelp.com/v3"
-# 
-# # Define the Authorization token
-# # token <- ""
-# 
-# # Create a dictionary to hold the parameters for the API request
-params <- list(
-  location = 'Vancouver',
-  categories = 'restaurant',
-  term = 'italian',
-  sort_by = 'best_match',
-  limit = 50
-)
-# 
-# # Define the URL for businesses search endpoint
-# url_businesses <- paste0(domain, "/businesses/search?")
-# 
-# # Request the data
-# response <- GET(url_businesses, add_headers(Authorization = token), query = params)
-# 
-# # Check if the request was successful
-# if (status_code(response) != 200) {
-#   stop("Failed to retrieve data.")
-# }
-# 
-# # Extract the requested data
-# raw_data <- content(response, "text") %>%
-#   fromJSON(simplifyVector = TRUE) %>%
-#   `[[`("businesses")
-# 
-# # Create a DataFrame
-# df_businesses <- as.data.frame(raw_data)
-# 
-# # Select the columns of interest
-# df_ratings <- df_businesses %>%
-#   dplyr::select(name, review_count, rating, distance, price, coordinates)
-# 
-# df_ratings$latitude <- df_ratings$coordinates$latitude
-# df_ratings$longitude <- df_ratings$coordinates$longitude
-# df_ratings = select(df_ratings, -c(coordinates))
-# 
-# # Convert numerical columns to numeric format
-# numeric_columns <- c('review_count', 'rating', 'distance', 'latitude', 'longitude')
-# df_ratings[numeric_columns] <- lapply(df_ratings[numeric_columns], as.numeric)
-# 
-# 
-# df_ratings <- df_ratings %>%
-#   arrange(name) %>%
-#   group_by(name) %>%
-#   mutate(RunningNumber = row_number())
-# 
-# # Add a number to a string value when Value > 1
-# df_ratings <- df_ratings %>%
-#   mutate(name = ifelse(RunningNumber > 1, paste(name, " ", RunningNumber, sep = ""), name))
-# 
-# 
-# 
-# # Map price levels to factors
-# price_factors <- c("$" = 1, "$$" = 2, "$$$" = 3, "$$$$" = 4)
-# price_factors[is.na(price_factors)] <- NULL
-# 
-# # Add price factor column
-# df_ratings$price_factor <- price_factors[df_ratings$price]
-# df_ratings$price_factor[is.na(df_ratings$price_factor)] <- 0.1
-
 
 # GeoHeatmap ============================================================================================================
 #' Generate a geographic heatmap using Plotly
@@ -94,9 +28,46 @@ params <- list(
 #' @import stringr
 #' @import tools
 geo_heatmap <- function(df_loc, factor_plot) {
+  # data preprocessing for plotting
+
+  # create data frame
+  list_business_prep <- list(
+    name = df_loc$name,
+    review_count = df_loc$review_count,
+    rating = df_loc$rating,
+    distance = df_loc$distance,
+    price = df_loc$price,
+    latitude = df_loc$coordinates$latitude,
+    longitude = df_loc$coordinates$longitude
+  )
+  df_business_factors <- data.frame(list_business_prep)
+  df_business_factors <- df_business_factors[!with(df_business_factors,is.na(latitude)& is.na(longitude)),]
+  
+  # Convert numerical columns to numeric format
+  numeric_columns <- c('review_count', 'rating', 'distance', 'latitude', 'longitude')
+  df_business_factors[numeric_columns] <- lapply(df_business_factors[numeric_columns], as.numeric)
+  
+  # add name to place if they have many branches
+  df_business_factors <- df_business_factors %>%
+    arrange(name) %>%
+    group_by(name) %>%
+    mutate(RunningNumber = row_number())
+  
+  # Add a number to a string value when Value > 1
+  df_business_factors <- df_business_factors %>%
+    mutate(name = ifelse(RunningNumber > 1, paste(name, " ", RunningNumber, sep = ""), name))
+  
+  # Map price levels to factors
+  # Add price factor column
+  df_business_factors$price_factor <- 1
+  df_business_factors$price_factor[df_business_factors$price == "$"] <- 1
+  df_business_factors$price_factor[df_business_factors$price == "$$"] <- 2
+  df_business_factors$price_factor[df_business_factors$price == "$$$"] <- 3
+  df_business_factors$price_factor[df_business_factors$price == "$$$"] <- 4
+  df_business_factors$price_factor[is.na(df_business_factors$price)] <- 0.1  # for plotting the unknow price
   
   # adjust ratio of point on the map based on the maximum value of factor
-  max_val <- max(df_loc[[factor_plot]])
+  max_val <- max(df_business_factors[[factor_plot]])
   if (max_val<=4){
     ratio_size <- 0.6/max_val  
   }else if (max_val>10){
@@ -107,12 +78,10 @@ geo_heatmap <- function(df_loc, factor_plot) {
 
   # Clean string
   factor_plot_clean <- toTitleCase(gsub("_", " ", factor_plot))
-  title_name = paste(params$term, params$categories, "in", params$location, "by", factor_plot_clean)
-  title_name_upperfirst <- toTitleCase(title_name)
-  
+
   # Plot graph
   fig <- plot_ly(
-    data = df_loc,
+    data = df_business_factors,
     lat = ~latitude,
     lon = ~longitude,
     mode = 'markers',
@@ -137,26 +106,10 @@ geo_heatmap <- function(df_loc, factor_plot) {
       mapbox = list(
         style = 'carto-positron',  #  Can change to 'open-street-map'
         zoom = 10,
-        center = list(lon = mean(df_loc$longitude, na.rm=TRUE), lat = mean(df_loc$latitude, na.rm=TRUE))
-      ),
-      title = title_name_upperfirst
+        center = list(lon = median(df_business_factors$longitude, na.rm=TRUE), lat = median(df_business_factors$latitude, na.rm=TRUE))
+      )
     ) 
   
   return(fig) 
 }
 
-# # call function
-# test <-  df_ratings[df_ratings$review_count<500, ]
-# test <- df_ratings
-# 
-# fig_geo_heat <- geo_heatmap(test, factor_plot='price_factor')
-# fig_geo_heat
-# 
-# 
-# fig_geo_heat <- geo_heatmap(test, factor_plot='rating')
-# fig_geo_heat
-# 
-# 
-# fig_geo_heat <- geo_heatmap(test, factor_plot='review_count')
-# fig_geo_heat
-# 
