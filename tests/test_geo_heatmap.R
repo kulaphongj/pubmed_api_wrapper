@@ -1,5 +1,4 @@
 library(testthat)
-# library(yelpviz)
 library(tools)
 library(plotly)
 library(dplyr)

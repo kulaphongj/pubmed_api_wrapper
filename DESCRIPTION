@@ -1,14 +1,23 @@
 Package: yelpviz
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Wrap Yelp APIS for visualization the interesting businesses in the specific area.
 Version: 0.1.0
-Author: Who wrote it
+Author: Nijiati Abulizi, Kulaphong Jitareerat, Craig Adlam
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Suggests:
   testthat
 RoxygenNote: 7.3.1
+
+Imports:
+  httr
+  jsonlite
+  dplyr
+  tools
+  plotly
+
+URL: https://github.com/kulaphongj/yelp_api_wrapper
