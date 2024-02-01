@@ -25,13 +25,13 @@ api_key = '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mK
 #' @seealso \code{\link{httr::GET}}, \code{\link{httr::add_headers}}, \code{\link{jsonlite::fromJSON}}
 #'
 #' @export
-SearchBusinesses <- function(api_key, location, business_type, keyword, offset = 0, limit = 50) {
+search_businesses <- function(api_key, location, business_type, keyword, offset = 0, limit = 50) {
   # Define the API endpoint URL
   url <- 'https://api.yelp.com/v3/businesses/search'
-  
+
   # Set the authorization headers with the API key
   headers <- add_headers('Authorization' = sprintf('Bearer %s', api_key))
-  
+
   # Define parameters for the API request
   params <- list(
     location = location,
@@ -39,10 +39,10 @@ SearchBusinesses <- function(api_key, location, business_type, keyword, offset =
     limit = limit,
     offset = offset
   )
-  
+
   # Send the GET request to the Yelp Fusion API
   response <- httr::GET(url, headers, query = params)
-  
+
   # Check if the response status code is 200 (OK)
   if (httr::status_code(response) == 200) {
     # Extract and return the list of businesses from the JSON response
