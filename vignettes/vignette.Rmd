@@ -1,0 +1,140 @@
+---
+title: "vignette"
+author: "Nijiati Abulizi, Kulaphong Jitareerat, Craig Adlam"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# YelpViz API Wrapper   
+
+### Getting Started
+
+Installation of the package:
+
+```{r}
+library(yelpviz)
+```
+
+Install required libraries:
+
+```{r}
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(stringr)
+```
+
+### analyze_cities()
+
+To analyze the ratings for different cities based on a single business sector within an interactive density plot, call the analyze_cities function. This retrieves the best matched businesses for that business sector and can accept multiple cities for comparison. For quick analysis, simply call `analyze_cities()` and enter required information when prompted.
+
+**Prompts**\
+*"Please enter your Yelp API key: "*\
+*"Please enter the cities (separated by commas if multiple): "*\
+*"Please enter the category name: "*
+
+***The dataframe, parameter values, and plot are returned.***
+
+```{r}
+analyze_cities()
+```
+
+***--- discuss output here ---***
+
+Or for more in-depth analysis, the user can set or enter the parameters prior and assign to a variable to be called:\
+\
+**Required parameters**
+
+| Parameter  | Description          | Default |
+|------------|----------------------|---------|
+| `api_key`  | Yelp API key         | NULL    |
+| `cities`   | List of cities       | NULL    |
+| `category` | Business sector      | NULL    |
+| `limit`    | Number of businesses | 20      |
+
+```{r}
+# Enter the Yelp API key and specify multiple cities in a vector
+api_key <- <<<ENTER API KEY HERE>>>
+cities <- c('Kelowna', 'Red Deer', 'Toronto')
+
+# Assign to a variable for further analysis
+result <- analyze_cities(api_key, cities, 'food', 33)
+#result$combined_df # uncomment to see the dataframe
+#result$parameters # uncomment to see the parameters
+#result$plot # uncomment to see the plot
+```
+
+Now the user has the option to create other visualizations, retrieve summary statistics, or view the ratings, review counts, and prices of each business within the business sector.
+
+For example, the mean rating of each city can accessed:
+
+```{r}
+# Convert 'rating' column to numeric
+result$combined_df$rating <- as.numeric(result$combined_df$rating)
+
+# Calculate mean rating for City = 'Red Deer'
+mean_rating_red_deer <- mean(result$combined_df$rating[result$combined_df$City == "Red Deer"], na.rm = TRUE)
+mean_rating_red_deer
+```
+
+***--- discuss output here ---***
+
+### analyze_business_sectors()
+
+To analyze the ratings for different business sectors based on a single city by displaying a stacked-density plot, call the analyze_business_sectors function. This retrieves the best matched businesses for each business sector and can accept a single city for comparison. For quick analysis, simply call `analyze_business_sectors()` and enter required information when prompted.
+
+**Prompts**\
+*"Please enter your Yelp API key: "\
+"Please enter the city name: "\
+"Please enter the categories (separated by commas if multiple): "*
+
+***The dataframe, parameter values, and plot are returned.***
+
+```{r}
+analyze_business_sectors()
+```
+
+***--- discuss output here ---***
+
+Or for more in-depth analysis, the user can set or enter the parameters prior and assign to a variable to be called:\
+\
+**Required parameters**
+
+| Parameter    | Description              | Default |
+|--------------|--------------------------|---------|
+| `api_key`    | Yelp API key             | NULL    |
+| `city`       | Single city              | NULL    |
+| `categories` | List of business sectors | NULL    |
+| `limit`      | Number of businesses     | 20      |
+
+```{r}
+# Enter the Yelp API key and specify multiple categories in a vector
+api_key <- <<<ENTER API KEY HERE>>>
+categories <- c('food', 'gyms', 'golf')
+
+# Assign to a variable for further analysis
+result <- analyze_cities(api_key, 'Kelowna', categories, 33)
+#result$combined_df # uncomment to see the dataframe
+#result$parameters # uncomment to see the parameters
+#result$plot # uncomment to see the plot
+```
+
+Now the user has the option to create other visualizations, retrieve summary statistics, or view the ratings, review counts, and prices of each business sector within the city.
+
+For example, the rating and review count summary statistics of each business sector can accessed:
+
+```{r}
+summary(result$combined_df)
+```
+
+***--- discuss output here ---***
+
+***--- consider discussing other visualization output here ---***

@@ -14,7 +14,8 @@ Date: 2024/02/02
 - Included plot functions within both 'analyze' functions to return the plot  
 --- This ensures the dataframe, parameter list, and plot are returned  
 - Added prompts and error handling for incorrect parameters  
---- This ensures parameters must be entered if there is an empty function call
+--- This ensures parameters must be entered if there is an empty function call  
+- Added vignette (unsure if there are to be multiple or one main one)
 
 Date: 2024/02/01  
 - Saved multiple images from functionality function calls with different categories  
