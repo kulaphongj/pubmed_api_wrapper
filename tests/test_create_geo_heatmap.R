@@ -2,12 +2,11 @@ library(testthat)
 library(tools)
 library(plotly)
 library(dplyr)
-print(getwd())
 
-source("../R/geo_heatmap.R")
+source("../R/create_geo_heatmap.R")
 
 
-test_that("Test for geo_heatmap function", 
+test_that("Test for create_geo_heatmap function", 
   {
     
   # Generate Data
@@ -46,7 +45,7 @@ test_that("Test for geo_heatmap function",
 
   
   # run function to get data
-  plot_geo_res <- geo_heatmap(restaurant_data, factor_plot = 'price_factor')
+  plot_geo_res <- create_geo_heatmap(restaurant_data, factor_plot = 'price_factor')
   
   # Check if the plot_object is a plotly object
   expect_is(plot_geo_res, "plotly")

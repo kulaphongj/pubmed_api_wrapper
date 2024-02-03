@@ -1,11 +1,4 @@
-library(httr)
-library(jsonlite)
-library(dplyr)
-library(tools)
-library(plotly)
-
-
-# GeoHeatmap ============================================================================================================
+# create_geo_heatmap ============================================================================================================
 #' Generate a geographic heatmap using Plotly
 #'
 #' This function creates a geographic heatmap using the Plotly library in R. It takes a dataframe
@@ -20,7 +13,7 @@ library(plotly)
 #' @examples
 #' \dontrun{
 #'   # Example usage
-#'   heatmap <- geo_heatmap(df, "price_factor")
+#'   heatmap <- create_geo_heatmap(df, "price_factor")
 #'   heatmap
 #' }
 #'
@@ -28,9 +21,8 @@ library(plotly)
 #' @import dplyr
 #' @import stringr
 #' @import tools
-geo_heatmap <- function(df_loc, factor_plot) {
+create_geo_heatmap <- function(df_loc, factor_plot) {
   # data preprocessing for plotting
-
   # create data frame
   list_business_prep <- list(
     name = df_loc$name,

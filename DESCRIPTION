@@ -1,23 +1,30 @@
 Package: yelpviz
 Type: Package
-Title: Wrap Yelp APIS for visualization the interesting businesses in the specific area.
+Title: Wrap Yelp APIS for visualization of the interesting businesses in the specific area.
 Version: 0.1.0
 Author: Nijiati Abulizi, Kulaphong Jitareerat, Craig Adlam
 Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description:
+    The "yelpviz" package is designed to simplify the process of accessing Yelp APIs and 
+    visualizing interesting businesses within a specific area. 
+    Leveraging the power of Yelp's rich dataset, this package allows users to seamlessly retrieve business information 
+    and create interactive visualizations to gain insights into local establishments.
+Key Features:
+    - Streamlined API Access: Easily access Yelp's API to fetch information about businesses, 
+    including details like reviews, ratings, and location data.
+    - Analyze Location: Provide a data frame, containing available businesses in an area and visualize them.
+    - WordCloud Visualization: Visualize the Name businesses name as WordCloud.
+    - Geospatial Visualization: Visualize the geographical distribution of businesses using interactive maps.
 License: MIT
 Encoding: UTF-8
 LazyData: true
 Suggests:
   testthat
 RoxygenNote: 7.3.1
-
 Imports:
-  httr
-  jsonlite
-  dplyr
-  tools
+  httr,
+  jsonlite,
+  dplyr,
+  tools,
   plotly
-
 URL: https://github.com/kulaphongj/yelp_api_wrapper
