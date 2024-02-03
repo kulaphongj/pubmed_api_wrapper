@@ -5,6 +5,21 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+Date: 2024/02/03
+- Renamed geo_heatmap function to create_geo_heatmap.
+- Renamed geo_heatmap.Rd to create_geo_heatmap.Rd.
+- Added information in the DESCRIPTION.
+- Explored to make R package and use Github Action for CI.
+
+Date: 2024/02/01
+- Helped Nijiati fix data stacking bug in the search_businesses function.
+- Tested geo_heatmap with data, getting from the search_businesses function.
+- Added details in the geo_heatmap.Rd
+
+Date: 2024/01/31
+- Explored how to make R package, get coverage of the codes, and use Travis CI for CI.
+- Re-Organized folders and files
+
 Date: 2024/01/28
 - Developed geo-heat map that can receive other factors, including rating, review count, and price.
 - Added function docstring

@@ -1,7 +1,7 @@
 # Function to get all businesses by paginating through Yelp search results
 library(httr)
 library(jsonlite)
-source("search_businesses.R")
+source("./R/search_businesses.R")
 
 # Function to get all businesses by paginating through Yelp search results
 get_all_businesses <- function(api_key, location, business_type, keyword, total = 1000) {
