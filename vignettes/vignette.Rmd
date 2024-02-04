@@ -11,18 +11,16 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# YelpViz API Wrapper   
+# YelpViz API Wrapper
 
 ### Getting Started
 
 Installation of the package:
-
 ```{r}
 library(yelpviz)
 ```
 
 Install required libraries:
-
 ```{r}
 library(httr)
 library(jsonlite)
@@ -42,12 +40,9 @@ To analyze the ratings for different cities based on a single business sector wi
 *"Please enter the category name: "*
 
 ***The dataframe, parameter values, and plot are returned.***
-
 ```{r}
 analyze_cities()
 ```
-
-***--- discuss output here ---***
 
 Or for more in-depth analysis, the user can set or enter the parameters prior and assign to a variable to be called:\
 \
@@ -63,29 +58,76 @@ Or for more in-depth analysis, the user can set or enter the parameters prior an
 ```{r}
 # Enter the Yelp API key and specify multiple cities in a vector
 api_key <- <<<ENTER API KEY HERE>>>
-cities <- c('Kelowna', 'Red Deer', 'Toronto')
+cities <- c('Kelowna', 'Penticton', 'Red Deer', 'Edmonton', 'Calgary', 'Vancouver', 'Toronto', 'Portland', 'New York City', 'San Francisco')
 
 # Assign to a variable for further analysis
 result <- analyze_cities(api_key, cities, 'food', 33)
 #result$combined_df # uncomment to see the dataframe
 #result$parameters # uncomment to see the parameters
-#result$plot # uncomment to see the plot
+#result$plot_facetted # uncomment to see the facetted plot
+#result$plot_interactive # uncomment to see the interactive plot
 ```
+
+**Example output of the plots:**
+
+::: {style="display: flex; justify-content: center;"}
+![Golf Facetted](../example_plots/golf_facetted.png){width="40%"} ![Golf Interactive](../example_plots/golf_interactive.png){width="40%"}
+:::
 
 Now the user has the option to create other visualizations, retrieve summary statistics, or view the ratings, review counts, and prices of each business within the business sector.
 
 For example, the mean rating of each city can accessed:
-
 ```{r}
-# Convert 'rating' column to numeric
-result$combined_df$rating <- as.numeric(result$combined_df$rating)
+# To display how many businesses were actually retrieved for each city
+table(result$combined_df$City)
 
-# Calculate mean rating for City = 'Red Deer'
-mean_rating_red_deer <- mean(result$combined_df$rating[result$combined_df$City == "Red Deer"], na.rm = TRUE)
-mean_rating_red_deer
+# Replace 'desired_city' with the city you want to summarize
+desired_city <- "Kelowna"
+
+# Filter the dataframe based on the 'desired_city'
+city_data <- result$combined_df[result$combined_df$City == desired_city, ]
+
+# Display the summary of the filtered data frame
+summary(city_data)
 ```
 
-***--- discuss output here ---***
+```
+     City               name            review_count      rating         price           price_factor
+ Length:10          Length:10          Min.   : 1.0   Min.   :2.000   Length:10          1   :1      
+ Class :character   Class :character   1st Qu.: 4.0   1st Qu.:3.500   Class :character   2   :0      
+ Mode  :character   Mode  :character   Median : 4.5   Median :3.500   Mode  :character   3   :0      
+                                       Mean   : 5.0   Mean   :3.550                      NA's:9      
+                                       3rd Qu.: 6.0   3rd Qu.:3.875                                  
+                                       Max.   :12.0   Max.   :4.500
+```
+
+```{r}
+library(dplyr)
+# Calculate the mean for each city in the category golf
+city_means <- result$combined_df %>%
+  group_by(City) %>%
+  summarize(mean_review_count = mean(review_count),
+            mean_rating = mean(rating))
+
+# Print the mean values for each city
+print(city_means)
+```
+
+```
+# A tibble: 10 × 3
+   City          mean_review_count mean_rating
+   <chr>                     <dbl>       <dbl>
+ 1 Calgary                    4.1         3.52
+ 2 Edmonton                   4.44        3.58
+ 3 Kelowna                    5           3.55
+ 4 New York City             33.5         4.14
+ 5 Penticton                  4.56        3.75
+ 6 Portland                  39.9         4   
+ 7 Red Deer                   1.17        4.67
+ 8 San Francisco             81.7         3.91
+ 9 Toronto                    4.82        3.89
+10 Vancouver                 10.4         3.81
+```
 
 ### analyze_business_sectors()
 
@@ -97,12 +139,9 @@ To analyze the ratings for different business sectors based on a single city by 
 "Please enter the categories (separated by commas if multiple): "*
 
 ***The dataframe, parameter values, and plot are returned.***
-
 ```{r}
 analyze_business_sectors()
 ```
-
-***--- discuss output here ---***
 
 Or for more in-depth analysis, the user can set or enter the parameters prior and assign to a variable to be called:\
 \
@@ -118,23 +157,76 @@ Or for more in-depth analysis, the user can set or enter the parameters prior an
 ```{r}
 # Enter the Yelp API key and specify multiple categories in a vector
 api_key <- <<<ENTER API KEY HERE>>>
-categories <- c('food', 'gyms', 'golf')
+categories <- c('food', 'gyms', 'golf', 'shopping', 'hotelstravel', 'nightlife', 'casinos', 'airports', 'roofing', 'plumbing')
 
 # Assign to a variable for further analysis
 result <- analyze_cities(api_key, 'Kelowna', categories, 33)
 #result$combined_df # uncomment to see the dataframe
 #result$parameters # uncomment to see the parameters
-#result$plot # uncomment to see the plot
+#result$plot_facetted # uncomment to see the facetted plot
+#result$plot_interactive # uncomment to see the interactive plot
 ```
+
+**Example output of the plots:**
+
+::: {style="display: flex; justify-content: center;"}
+![Kelowna Facetted](../example_plots/kelowna_facetted.png){width="40%"} ![Kelowna Interactive](../example_plots/kelowna_interactive.png){width="40%"}
+:::
 
 Now the user has the option to create other visualizations, retrieve summary statistics, or view the ratings, review counts, and prices of each business sector within the city.
 
 For example, the rating and review count summary statistics of each business sector can accessed:
-
 ```{r}
-summary(result$combined_df)
+# To display how many businesses were actually retrieved for each category
+table(result$combined_df$Category)
+
+# Replace 'desired_category' with the category you want to summarize
+desired_category <- "golf"
+
+# Filter the dataframe based on the 'desired_category'
+category_data <- result$combined_df[result$combined_df$Category == desired_category, ]
+
+# Display the summary of the filtered data frame
+summary(category_data)
 ```
 
-***--- discuss output here ---***
+```         
+   Category             name            review_count      rating         price           price_factor
+ Length:10          Length:10          Min.   : 1.0   Min.   :2.000   Length:10          1   :1      
+ Class :character   Class :character   1st Qu.: 4.0   1st Qu.:3.500   Class :character   2   :0      
+ Mode  :character   Mode  :character   Median : 4.5   Median :3.500   Mode  :character   3   :0      
+                                       Mean   : 5.0   Mean   :3.550                      NA's:9      
+                                       3rd Qu.: 6.0   3rd Qu.:3.875                                  
+                                       Max.   :12.0   Max.   :4.500
+```
 
-***--- consider discussing other visualization output here ---***
+```{r}
+library(dplyr)
+# Calculate the mean for each category in the City of Kelowna
+category_means <- result$combined_df %>%
+  group_by(Category) %>%
+  summarize(mean_review_count = mean(review_count),
+            mean_rating = mean(rating))
+
+# Print the mean values for each category
+print(category_means)
+```
+
+```
+# A tibble: 10 × 3
+   Category     mean_review_count mean_rating
+   <chr>                    <dbl>       <dbl>
+ 1 airports                 23           3.25
+ 2 casinos                   4.4         2.1 
+ 3 food                     33.2         4.38
+ 4 golf                      5           3.55
+ 5 gyms                      3.59        3.59
+ 6 hotelstravel             13.3         4.17
+ 7 nightlife                46.1         3.86
+ 8 plumbing                  2.83        3.07
+ 9 roofing                   1.9         2.5 
+10 shopping                  4.18        4.65
+```
+
+
+

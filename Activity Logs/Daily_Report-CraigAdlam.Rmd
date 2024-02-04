@@ -9,6 +9,13 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Date: 2024/02/03  
+- Modified subplots to exclude y-axis ticks and density scales  
+- Created corrected example plots (sorted vector fix for plot mapping)  
+- Modified code to return both the facetted plot as well as the interactive plot  
+--- This allows the user to compare interactively or in separate facetted plots  
+- Updated vignette to include example output and new returned values  
+
 Date: 2024/02/02  
 - Excluded API key, and environmental variable from function  
 - Included plot functions within both 'analyze' functions to return the plot  
