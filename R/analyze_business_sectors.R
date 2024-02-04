@@ -33,8 +33,8 @@ analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = N
     stop("Categories must be a string or a vector of strings.")
   }
   
-  # Sort cities alphabetically to ensure plotting function maps correctly
-  cities <- sort(cities)
+  # Sort categories alphabetically to ensure plotting function maps correctly
+  categories <- sort(categories)
   
   # Define the main domain of the url
   domain <- "https://api.yelp.com/v3"
@@ -42,32 +42,33 @@ analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = N
   # Define the Authorization token with the API key
   token <- paste("Bearer", api_key, sep = " ")
   
-  # Define the URL for categories endpoint
-  url_categories <- paste0(domain, "/categories")
-  
-  # Make request to categories endpoint
-  response_categories <- GET(url_categories, add_headers(Authorization = token))
-  
-  # Check if the request was successful
-  if (status_code(response_categories) != 200) {
-    stop("Failed to retrieve categorical data.")
-  }
-  
-  # Extracting category titles
-  raw_data_categories <- content(response_categories, "parsed")
-  categories_yelp <- sapply(raw_data_categories$categories, function(category) {
-    if ("alias" %in% names(category)) {
-      unlist(category[["alias"]])
-    } else {
-      NA
-    }
-  })
-  
-  # Check if all categories are valid
-  invalid_categories <- setdiff(categories, unique(unlist(categories_yelp)))
-  if (length(invalid_categories) > 0) {
-    stop("Invalid categories:", paste(invalid_categories, collapse = ", "))
-  }
+  # UNCOMMENT TO CHECK FOR CATEGORIES; COMMENTED OUT TO SAVE REQUESTS
+  # # Define the URL for categories endpoint
+  # url_categories <- paste0(domain, "/categories")
+  # 
+  # # Make request to categories endpoint
+  # response_categories <- GET(url_categories, add_headers(Authorization = token))
+  # 
+  # # Check if the request was successful
+  # if (status_code(response_categories) != 200) {
+  #   stop("Failed to retrieve categorical data.")
+  # }
+  # 
+  # # Extracting category titles
+  # raw_data_categories <- content(response_categories, "parsed")
+  # categories_yelp <- sapply(raw_data_categories$categories, function(category) {
+  #   if ("alias" %in% names(category)) {
+  #     unlist(category[["alias"]])
+  #   } else {
+  #     NA
+  #   }
+  # })
+  # 
+  # # Check if all categories are valid
+  # invalid_categories <- setdiff(categories, unique(unlist(categories_yelp)))
+  # if (length(invalid_categories) > 0) {
+  #   stop("Invalid categories:", paste(invalid_categories, collapse = ", "))
+  # }
   
   # Create a dictionary to store parameters
   parameters <- list(
@@ -133,18 +134,61 @@ analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = N
   
   # Extract category from parameters
   city <- str_to_title(parameters$location)
+
   
+  
+  # FACETTED PLOT  
   # Density plot for comparing rating density across different categories
   p <- ggplot(combined_df, aes(x = rating, fill = Category, color = Category)) +
-    geom_density(alpha = 0.6, adjust = 0.6) +  # Density plot with transparency
+    geom_density(alpha = 0.6, adjust = 0.9) +  # Density plot with transparency
     labs(x = "Rating", y = "Density", title = paste("Business Sector Ratings in", city)) + # Updated title with city name
     scale_fill_discrete(name = "Category") +  # Custom legend title for fill color
     scale_color_discrete(name = "Category") +  # Custom legend title for color
     facet_wrap(~ Category, ncol = 1, scales = "free_y", strip.position = "bottom", shrink = TRUE, nrow = length(unique(combined_df$Category))) +  # Separate plots for each category with increased height
-    theme(strip.text = element_blank(), axis.text.y = element_blank())  # Remove category names and y-axis labels from subplots
+    theme_minimal() +
+    theme(strip.text = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks.y = element_blank(),  # Remove category names, y-axis labels, and y-axis ticks from subplots
+          panel.grid.major.y = element_blank(),
+          panel.grid.minor.y = element_blank())  # Remove horizontal grid lines
+          # panel.grid = element_blank())  # Remove grid lines
+
   
-  # Return both the combined dataframe and the parameters used
-  return(list(combined_df = combined_df, parameters = parameters, plot = p))
+  
+  # INTERACTIVE PLOT  
+  # Extract data from ggplot object
+  plot_data <- ggplot_build(p)
+  
+  # Create plotly object
+  p2 <- plot_ly()
+  
+  # Add density traces for each category
+  for(i in seq_along(plot_data$data)){
+    category <- plot_data$data[[i]]$group
+    category_name <- unique(combined_df$Category)[category]
+    p2 <- add_trace(p2, 
+                    x = plot_data$data[[i]]$x, 
+                    y = plot_data$data[[i]]$y,
+                    type = "scatter", 
+                    mode = "lines", 
+                    fill = "tozeroy",
+                    fillcolor = plot_data$data[[i]]$Category,
+                    line = list(color = plot_data$data[[i]]$group),
+                    name = category_name,
+                    text = paste("Category: ", category_name, "<br>Rating: ", plot_data$data[[i]]$x, "<br>Density: ", round(plot_data$data[[i]]$y, 2)),
+                    hoverinfo = "text+x+y")
+  }
+  
+  # Customize layout
+  p2 <- layout(p2, 
+               title = paste("Business Sector Ratings in", city),
+               xaxis = list(title = "Rating", showline = FALSE),
+               yaxis = list(title = "Density",
+                            showticklabels = FALSE,
+                            showgrid = FALSE))
+  
+  # Return both the combined dataframe, the parameters used, and both plots
+  return(list(combined_df = combined_df, parameters = parameters, plot_facetted = p, plot_interactive = p2))
 }
 
 
