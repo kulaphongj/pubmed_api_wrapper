@@ -11,6 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Date: 2024/02/05  
 - Added unit tests to second function analyze_business_sectors  
+- Added analyze_cities.Rd & analyze_business_sectors.Rd to 'man' directory  
+- Added roxygen2 documentation to analyze_cities.R & analyze_business_sectors.R  
+- Debugged mock tests and updated test_main  
 
 Date: 2024/02/03  
 - Modified subplots to exclude y-axis ticks and density scales  

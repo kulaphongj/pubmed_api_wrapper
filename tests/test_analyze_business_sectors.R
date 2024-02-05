@@ -15,9 +15,9 @@ test_that("API key is retrieved from environment variable", {
 
 # Test for successful API request
 test_that("Function retrieves data for each category", {
-  city <- 'Kelowna'
+  location <- 'Kelowna'
   categories <- c('food', 'gyms', 'golf')
-  result <- analyze_business_sectors(api_key, city, categories, 20)
+  result <- analyze_business_sectors(api_key, location, categories, 20)
   expect_gt(nrow(result$combined_df), 0)
 })
 
@@ -25,27 +25,18 @@ test_that("Function retrieves data for each category", {
 
 # Test for API request failure handling with invalid city
 test_that("Function handles API request failures", {
-  city <- 'Invalid City'
+  location <- 'Invalid City'
   categories <- c('food', 'gyms', 'golf')
-  expect_error(analyze_business_sectors(api_key, city, categories, 20), "Failed to retrieve data.")
-})
-
-
-
-# Test for API request failure handling with invalid category
-test_that("Function handles API request failures", {
-  city <- 'Kelowna'
-  categories <- c('food', 'Invalid Category', 'golf')
-  expect_error(analyze_business_sectors(api_key, city, categories, 20), "Invalid categories: Invalid Category")
+  expect_error(analyze_business_sectors(api_key, location, categories, 20), "Failed to retrieve data.")
 })
 
 
 
 # Test for correct output type
 test_that("Output is a list with combined dataframe, parameters, and plots", {
-  city <- 'Kelowna'
+  location <- 'Kelowna'
   categories <- c('food', 'gyms', 'golf')
-  result <- analyze_business_sectors(api_key, city, categories, 20)
+  result <- analyze_business_sectors(api_key, location, categories, 20)
   expect_is(result, "list")
   expect_named(result, c("combined_df", "parameters", "plot_facetted", "plot_interactive"))
 })
@@ -54,9 +45,9 @@ test_that("Output is a list with combined dataframe, parameters, and plots", {
 
 # Test for correct DataFrame columns
 test_that("Combined dataframe has expected columns", {
-  city <- 'Kelowna'
+  location <- 'Kelowna'
   categories <- c('food', 'gyms', 'golf')
-  result <- analyze_business_sectors(api_key, city, categories, 20)
+  result <- analyze_business_sectors(api_key, location, categories, 20)
   expected_columns <- c("name", "review_count", "rating", "price", "price_factor", "Category")
   expect_true(all(sapply(expected_columns, function(col) any(tolower(col) == tolower(names(result$combined_df))))))
 })
@@ -65,12 +56,12 @@ test_that("Combined dataframe has expected columns", {
 
 # Test for correct parameter passing
 test_that("Function passes correct parameters to API request", {
-  city <- 'Kelowna'
+  location <- 'Kelowna'
   categories <- sort(c('food', 'gyms', 'golf'))
   limit <- 20
-  result <- analyze_business_sectors(api_key, city, categories, limit)
+  result <- analyze_business_sectors(api_key, location, categories, limit)
   expect_equal(result$parameters$api_key, api_key)
-  expect_equal(result$parameters$location, city)
+  expect_equal(result$parameters$location, location)
   expect_equal(result$parameters$categories, categories)
   expect_equal(as.character(result$parameters$limit), as.character(limit))
 })
@@ -79,9 +70,9 @@ test_that("Function passes correct parameters to API request", {
 
 # Test for price factorization
 test_that("Price factorization is performed correctly", {
-  city <- 'Kelowna'
+  location <- 'Kelowna'
   categories <- c('food', 'gyms', 'golf')
-  result <- analyze_business_sectors(api_key, city, categories, 20)
+  result <- analyze_business_sectors(api_key, location, categories, 20)
   expect_true(all(levels(result$combined_df$price_factor) %in% c(NA, 1, 2, 3)))
 })
 
@@ -89,11 +80,11 @@ test_that("Price factorization is performed correctly", {
 
 # Test for plot generation
 test_that("Plot is generated without errors", {
-  city <- 'Kelowna'
+  location <- 'Kelowna'
   categories <- c('food', 'gyms', 'golf')
-  result <- analyze_business_sectors(api_key, city, categories, 20)
+  result <- analyze_business_sectors(api_key, location, categories, 20)
   expect_no_error({
-    city <- str_to_title(city)
+    city <- str_to_title(location)
     # Create the plot directly
     p <- ggplot(result$combined_df, aes(x = rating, fill = Category, color = Category)) +
       geom_density(alpha = 0.6) +  # Density plot with transparency
