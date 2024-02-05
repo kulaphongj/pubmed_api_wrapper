@@ -1,21 +1,24 @@
-# Required libraries:
-# library(httr)
-# library(jsonlite)
-# library(dplyr)
-# library(ggplot2)
-# library(plotly)
-# library(stringr)
+#' Analyze Cities
+#'
+#' This function retrieves business data from Yelp API for specified cities and category, analyzes the ratings, and generates facetted and interactive plots.
+#'
+#' @param api_key A character string representing the Yelp API key. If NULL, the user will be prompted to enter the API key.
+#' @param location A character vector containing the names of cities to analyze. If NULL, the user will be prompted to enter the cities.
+#' @param categories A character string representing the category of businesses to analyze. If NULL, the user will be prompted to enter a category.
+#' @param limit An integer specifying the maximum number of businesses to retrieve per city. Default is 20.
+#' @return A list containing the combined dataframe of business ratings for all cities, the parameters used, and both facetted and interactive plots.
+#' @import httr jsonlite dplyr ggplot2 plotly stringr
+#' @examples
+#' analyze_cities()
+#' analyze_cities("your_api_key", c("Kelowna", "Penticton", "Red Deer"), "food", 33)
+#' analyze_cities(api_key = "your_api_key", location = c("Kelowna", "Penticton", "Red Deer"), categories = "food", limit = 33)
 
-api_key <- "ZTyAH-dJS8Xq5zk0MIIx2TtuL7lHxQSW0hoAU1NA5wEu6DwHJCGJeEHgkA18ctYGO8K_LG7KLbQgrEOwOiKj5DWYGI1nLVbWjxJzVLBwplwxqAxzAr35dM7s6nq3ZXYx"
-
-analyze_cities <- function(api_key = NULL, cities = NULL, category = NULL, limit = 20) {
-  # Required libraries:
-  library(httr)
-  library(jsonlite)
-  library(dplyr)
-  library(ggplot2)
-  library(plotly)
-  library(stringr)
+analyze_cities <- function(api_key = NULL, location = NULL, categories = NULL, limit = 20) {
+  
+  # Print parameters for debugging
+  cat("API Key:", api_key, "\n")
+  cat("Location:", location, "\n")
+  cat("Categories:", categories, "\n")
 
   # Prompt user to enter API key if not provided
   while (is.null(api_key) || api_key == '') {
@@ -25,27 +28,27 @@ analyze_cities <- function(api_key = NULL, cities = NULL, category = NULL, limit
   }
   
   # Prompt user to enter cities if not provided
-  while (is.null(cities) || length(cities) == 0 || all(cities == '')) {
+  while (is.null(location) || length(location) == 0 || all(location == '')) {
     cat("Please enter the cities (separated by commas if multiple): ")
     cities_input <- readline()
-    cities <- strsplit(cities_input, ",")[[1]]
-    cities <- trimws(cities)  # Trim leading and trailing whitespace
+    location <- strsplit(cities_input, ",")[[1]]
+    location <- trimws(location)  # Trim leading and trailing whitespace
   }
   
   # Ensure cities is a string or a vector of strings
-  if (!is.character(cities) || any(!nzchar(cities))) {
+  if (!is.character(location) || any(!nzchar(location))) {
     stop("Cities must be a string or a vector of strings.")
   }
   
-  # Prompt user to enter category if not provided
-  while (is.null(category) || category == '') {
-    cat("Please enter the category name: ")
-    category <- readline()
-    category <- trimws(category)  # Trim leading and trailing whitespace
+  # Prompt user to enter category if not provided or if multiple categories are entered
+  while (is.null(categories) || length(categories) != 1 || categories == '') {
+    cat("Please enter only one category name: ")
+    categories <- readline()
+    categories <- trimws(categories)  # Trim leading and trailing whitespace
   }
   
   # Sort cities alphabetically to ensure plotting function maps correctly
-  cities <- sort(cities)
+  cities <- sort(location)
   
   # Define the main domain of the url
   domain <- "https://api.yelp.com/v3"
@@ -67,24 +70,28 @@ analyze_cities <- function(api_key = NULL, cities = NULL, category = NULL, limit
 
   # Extracting category titles
   raw_data_categories <- content(response_categories, "parsed")
-  categories_yelp <- sapply(raw_data_categories$categories, function(category) {
-    if ("alias" %in% names(category)) {
-      unlist(category[["alias"]])
+  categories_yelp <- sapply(raw_data_categories$categories, function(categories) {
+    if ("alias" %in% names(categories)) {
+      unlist(categories[["alias"]])
     } else {
       NA
     }
   })
 
   # Check if the category is in the list of accepted categories
-  if (!(is.null(category) || category %in% unique(unlist(categories_yelp)))) {
-    stop("Invalid category. Please enter only one accepted category on Yelp.")
+  invalid_categories <- setdiff(categories, unique(unlist(categories_yelp)))
+  if (!(is.null(categories) || categories %in% unique(unlist(categories_yelp)))) {
+    message("Invalid category: ", paste(invalid_categories, collapse = ", "), "\n")
+    cat("Please use only one of the accepted Yelp categories: ", "\n", paste(unique(unlist(categories_yelp)), collapse = ", "), "\n")
+    categories <- readline()
+    categories <- trimws(categories)  # Trim leading and trailing whitespace
   }
   
   # Create a dictionary to store parameters
   parameters <- list(
     api_key = api_key,
-    cities = cities,
-    category = category,
+    location = location,
+    categories = categories,
     limit = limit
   )
   
@@ -97,7 +104,7 @@ analyze_cities <- function(api_key = NULL, cities = NULL, category = NULL, limit
     parameters_used_city <- list(
       api_key = api_key,
       location = city,
-      categories = category,
+      categories = categories,
       sort_by = 'best_match',
       limit = limit
     )
@@ -143,7 +150,7 @@ analyze_cities <- function(api_key = NULL, cities = NULL, category = NULL, limit
   combined_df <- bind_rows(city_results, .id = "City")
   
   # Extract category from parameters
-  category <- str_to_title(parameters$category)
+  category <- str_to_title(parameters$categories)
 
   
   

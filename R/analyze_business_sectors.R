@@ -1,19 +1,17 @@
-# Required libraries:
-library(httr)
-library(jsonlite)
-library(dplyr)
-library(ggplot2)
-library(plotly)
-library(stringr)
+#' Analyze Business Sectors
+#'
+#' This function retrieves business data from Yelp API for a specified city and categories, analyzes the ratings, and generates facetted and interactive plots.
+#'
+#' @param api_key A character string representing the Yelp API key. If NULL, the user will be prompted to enter the API key.
+#' @param location A character string representing the name of the city to analyze. If NULL, the user will be prompted to enter a city.
+#' @param categories A character vector containing the names of categories to analyze. If NULL, the user will be prompted to enter the categories.
+#' @param limit An integer specifying the maximum number of businesses to retrieve per category. Default is 20.
+#' @return A list containing the combined dataframe of business ratings for all categories, the parameters used, and both facetted and interactive plots.
+#' @import httr jsonlite dplyr ggplot2 plotly stringr
+#' @examples
+#' analyze_business_sectors(api_key = "your_api_key", location = "Kelowna", categories = c("food", "gyms", "golf"), limit = 33)
 
-analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = NULL, limit = 20) {
-  # Required libraries:
-  library(httr)
-  library(jsonlite)
-  library(dplyr)
-  library(ggplot2)
-  library(plotly)
-  library(stringr)
+analyze_business_sectors <- function(api_key = NULL, location = NULL, categories = NULL, limit = 20) {
   
   # Prompt user to enter API key if not provided
   while (is.null(api_key) || api_key == '') {
@@ -23,10 +21,10 @@ analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = N
   }
   
   # Prompt user to enter city if not provided
-  while (is.null(city) || city == '') {
+  while (is.null(location) || location == '') {
     cat("Please enter the city name: ")
-    city <- readline()
-    city <- trimws(city)  # Trim leading and trailing whitespace
+    location <- readline()
+    location <- trimws(location)  # Trim leading and trailing whitespace
   }
   
   # Prompt user to enter categories if not provided
@@ -65,9 +63,9 @@ analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = N
 
   # Extracting category titles
   raw_data_categories <- content(response_categories, "parsed")
-  categories_yelp <- sapply(raw_data_categories$categories, function(category) {
-    if ("alias" %in% names(category)) {
-      unlist(category[["alias"]])
+  categories_yelp <- sapply(raw_data_categories$categories, function(categories) {
+    if ("alias" %in% names(categories)) {
+      unlist(categories[["alias"]])
     } else {
       NA
     }
@@ -76,13 +74,16 @@ analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = N
   # Check if all categories are valid
   invalid_categories <- setdiff(categories, unique(unlist(categories_yelp)))
   if (length(invalid_categories) > 0) {
-    stop("Invalid categories: ", paste(invalid_categories, collapse = ", "))
+    message("Invalid categories: ", paste(invalid_categories, collapse = ", "), "\n")
+    cat("Please include only accepted Yelp categories: ", "\n", paste(unique(unlist(categories_yelp)), collapse = ", "), "\n")
+    categories <- readline()
+    categories <- trimws(categories)  # Trim leading and trailing whitespace
   }
   
   # Create a dictionary to store parameters
   parameters <- list(
     api_key = api_key,
-    location = city,
+    location = location,
     categories = categories,
     limit = limit
   )
@@ -95,7 +96,7 @@ analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = N
     # Update the parameters for the current category
     parameters_used_category <- list(
       api_key = api_key,
-      location = city,
+      location = location,
       categories = category,
       sort_by = 'best_match',
       limit = limit
@@ -141,7 +142,7 @@ analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = N
   # Combine dataframes for all categories into one dataframe
   combined_df <- bind_rows(category_results, .id = "Category")
   
-  # Extract category from parameters
+  # Extract city name from parameters
   city <- str_to_title(parameters$location)
 
   
