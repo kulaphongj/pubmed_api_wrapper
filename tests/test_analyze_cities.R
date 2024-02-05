@@ -61,8 +61,8 @@ test_that("Function passes correct parameters to API request", {
   limit <- 20
   result <- analyze_cities(api_key, location, categories, limit)
   expect_equal(result$parameters$api_key, api_key)
-  expect_equal(result$parameters$cities, location)
-  expect_equal(result$parameters$category, categories)
+  expect_equal(result$parameters$location, location)
+  expect_equal(result$parameters$categories, categories)
   expect_equal(as.character(result$parameters$limit), as.character(limit))  # Convert to character for comparison
 })
 
@@ -81,10 +81,10 @@ test_that("Price factorization is performed correctly", {
 # Test for plot generation
 test_that("Plot is generated without errors", {
   location <- c('Kelowna', 'Penticton', 'Red Deer')
-  categories
+  categories <- 'food'
   result <- analyze_cities(api_key, location, categories, 20)
   expect_no_error({
-    category <- str_to_title(result$parameters$category)
+    category <- str_to_title(result$parameters$categories)
     # Create the plot directly
     p <- ggplot(result$combined_df, aes(x = rating, fill = City, color = City)) +
       geom_density(alpha = 0.6) +  # Density plot with transparency
@@ -114,7 +114,7 @@ test_that("Plotly plot is generated without errors", {
   categories <- 'food'
   result <- analyze_cities(api_key, location, categories, 20)
   expect_no_error({
-    category <- str_to_title(result$parameters$category)
+    category <- str_to_title(result$parameters$categories)
     # Density plot for comparing rating density across different cities
     p <- ggplot(result$combined_df, aes(x = rating, fill = City, color = City)) +
       geom_density(alpha = 0.6) +  # Density plot with transparency
