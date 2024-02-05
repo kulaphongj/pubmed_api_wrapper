@@ -1,27 +1,31 @@
 library(testthat)
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(ggplot2)
+library(plotly)
 library(stringr)
-# install.packages("here")
-# library(here)
 
 # Source the file containing the function to be tested
-source("analyze_business_sectors.R") # source("C:\\PATH\\TO\\FILE\\analyze_business_sectors.R")
+# source("analyze_business_sectors.R") # source("C:\\PATH\\TO\\FILE\\analyze_business_sectors.R")
 
-# Test for API key handling
-test_that("API key is retrieved from environment variable", {
-  expect_true(nchar(api_key) > 0)
-})
-
-
-
-# Test for successful API request
-test_that("Function retrieves data for each category", {
+# Test for correct parameters being used, successful API request, data for each category, 
+# correct columns in the dataframe, and price factorization
+test_that("Output is a list with combined dataframe, parameters, and plots", {
   location <- 'Kelowna'
-  categories <- c('food', 'gyms', 'golf')
+  categories <- sort(c('food', 'gyms', 'golf'))
   result <- analyze_business_sectors(api_key, location, categories, 20)
+  expect_equal(result$parameters$api_key, api_key)
+  expect_equal(result$parameters$location, location)
+  expect_equal(result$parameters$categories, categories)
+  expect_equal(as.character(result$parameters$limit), as.character(result$parameters$limit))
+  expect_is(result, "list")
   expect_gt(nrow(result$combined_df), 0)
+  expect_named(result, c("combined_df", "parameters", "plot_facetted", "plot_interactive"))
+  expected_columns <- c("name", "review_count", "rating", "price", "price_factor", "Category")
+  expect_true(all(sapply(expected_columns, function(col) any(tolower(col) == tolower(names(result$combined_df))))))
+  expect_true(all(levels(result$combined_df$price_factor) %in% c(NA, 1, 2, 3)))
 })
-
-
 
 # Test for API request failure handling with invalid city
 test_that("Function handles API request failures", {
@@ -30,55 +34,7 @@ test_that("Function handles API request failures", {
   expect_error(analyze_business_sectors(api_key, location, categories, 20), "Failed to retrieve data.")
 })
 
-
-
-# Test for correct output type
-test_that("Output is a list with combined dataframe, parameters, and plots", {
-  location <- 'Kelowna'
-  categories <- c('food', 'gyms', 'golf')
-  result <- analyze_business_sectors(api_key, location, categories, 20)
-  expect_is(result, "list")
-  expect_named(result, c("combined_df", "parameters", "plot_facetted", "plot_interactive"))
-})
-
-
-
-# Test for correct DataFrame columns
-test_that("Combined dataframe has expected columns", {
-  location <- 'Kelowna'
-  categories <- c('food', 'gyms', 'golf')
-  result <- analyze_business_sectors(api_key, location, categories, 20)
-  expected_columns <- c("name", "review_count", "rating", "price", "price_factor", "Category")
-  expect_true(all(sapply(expected_columns, function(col) any(tolower(col) == tolower(names(result$combined_df))))))
-})
-
-
-
-# Test for correct parameter passing
-test_that("Function passes correct parameters to API request", {
-  location <- 'Kelowna'
-  categories <- sort(c('food', 'gyms', 'golf'))
-  limit <- 20
-  result <- analyze_business_sectors(api_key, location, categories, limit)
-  expect_equal(result$parameters$api_key, api_key)
-  expect_equal(result$parameters$location, location)
-  expect_equal(result$parameters$categories, categories)
-  expect_equal(as.character(result$parameters$limit), as.character(limit))
-})
-
-
-
-# Test for price factorization
-test_that("Price factorization is performed correctly", {
-  location <- 'Kelowna'
-  categories <- c('food', 'gyms', 'golf')
-  result <- analyze_business_sectors(api_key, location, categories, 20)
-  expect_true(all(levels(result$combined_df$price_factor) %in% c(NA, 1, 2, 3)))
-})
-
-
-
-# Test for plot generation
+# Test for ggplot generation
 test_that("Plot is generated without errors", {
   location <- 'Kelowna'
   categories <- c('food', 'gyms', 'golf')
@@ -113,7 +69,7 @@ test_that("Plot is generated without errors", {
 
 
 
-# Test for plotly part
+# Test for plotly plot generation
 test_that("Plotly plot is generated without errors", {
   categories <- c('food', 'gyms', 'golf')  # Define categories
   result <- analyze_business_sectors(api_key, 'Kelowna', categories, 20)  # Call the function
