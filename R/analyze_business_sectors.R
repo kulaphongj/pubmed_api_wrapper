@@ -1,11 +1,20 @@
 # Required libraries:
-# library(httr)
-# library(jsonlite)
-# library(dplyr)
-# library(ggplot2)
-# library(stringr)
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(ggplot2)
+library(plotly)
+library(stringr)
 
 analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = NULL, limit = 20) {
+  # Required libraries:
+  library(httr)
+  library(jsonlite)
+  library(dplyr)
+  library(ggplot2)
+  library(plotly)
+  library(stringr)
+  
   # Prompt user to enter API key if not provided
   while (is.null(api_key) || api_key == '') {
     cat("Please enter your Yelp API key: ")
@@ -43,38 +52,38 @@ analyze_business_sectors <- function(api_key = NULL, city = NULL, categories = N
   token <- paste("Bearer", api_key, sep = " ")
   
   # UNCOMMENT TO CHECK FOR CATEGORIES; COMMENTED OUT TO SAVE REQUESTS
-  # # Define the URL for categories endpoint
-  # url_categories <- paste0(domain, "/categories")
-  # 
-  # # Make request to categories endpoint
-  # response_categories <- GET(url_categories, add_headers(Authorization = token))
-  # 
-  # # Check if the request was successful
-  # if (status_code(response_categories) != 200) {
-  #   stop("Failed to retrieve categorical data.")
-  # }
-  # 
-  # # Extracting category titles
-  # raw_data_categories <- content(response_categories, "parsed")
-  # categories_yelp <- sapply(raw_data_categories$categories, function(category) {
-  #   if ("alias" %in% names(category)) {
-  #     unlist(category[["alias"]])
-  #   } else {
-  #     NA
-  #   }
-  # })
-  # 
-  # # Check if all categories are valid
-  # invalid_categories <- setdiff(categories, unique(unlist(categories_yelp)))
-  # if (length(invalid_categories) > 0) {
-  #   stop("Invalid categories:", paste(invalid_categories, collapse = ", "))
-  # }
+  # Define the URL for categories endpoint
+  url_categories <- paste0(domain, "/categories")
+
+  # Make request to categories endpoint
+  response_categories <- GET(url_categories, add_headers(Authorization = token))
+
+  # Check if the request was successful
+  if (status_code(response_categories) != 200) {
+    stop("Failed to retrieve categorical data.")
+  }
+
+  # Extracting category titles
+  raw_data_categories <- content(response_categories, "parsed")
+  categories_yelp <- sapply(raw_data_categories$categories, function(category) {
+    if ("alias" %in% names(category)) {
+      unlist(category[["alias"]])
+    } else {
+      NA
+    }
+  })
+
+  # Check if all categories are valid
+  invalid_categories <- setdiff(categories, unique(unlist(categories_yelp)))
+  if (length(invalid_categories) > 0) {
+    stop("Invalid categories: ", paste(invalid_categories, collapse = ", "))
+  }
   
   # Create a dictionary to store parameters
   parameters <- list(
     api_key = api_key,
     location = city,
-    category = categories,
+    categories = categories,
     limit = limit
   )
   
