@@ -6,7 +6,17 @@
 # library(plotly)
 # library(stringr)
 
+api_key <- "ZTyAH-dJS8Xq5zk0MIIx2TtuL7lHxQSW0hoAU1NA5wEu6DwHJCGJeEHgkA18ctYGO8K_LG7KLbQgrEOwOiKj5DWYGI1nLVbWjxJzVLBwplwxqAxzAr35dM7s6nq3ZXYx"
+
 analyze_cities <- function(api_key = NULL, cities = NULL, category = NULL, limit = 20) {
+  # Required libraries:
+  library(httr)
+  library(jsonlite)
+  library(dplyr)
+  library(ggplot2)
+  library(plotly)
+  library(stringr)
+
   # Prompt user to enter API key if not provided
   while (is.null(api_key) || api_key == '') {
     cat("Please enter your Yelp API key: ")
@@ -44,31 +54,31 @@ analyze_cities <- function(api_key = NULL, cities = NULL, category = NULL, limit
   token <- paste("Bearer", api_key, sep = " ")
 
   # UNCOMMENT TO CHECK FOR CATEGORIES; COMMENTED OUT TO SAVE REQUESTS  
-  # # Define the URL for categories endpoint
-  # url_categories <- paste0(domain, "/categories")
-  # 
-  # # Make request to categories endpoint
-  # response_categories <- GET(url_categories, add_headers(Authorization = token))
-  # 
-  # # Check if the request was successful
-  # if (status_code(response_categories) != 200) {
-  #   stop("Failed to retrieve categorical data.")
-  # }
-  # 
-  # # Extracting category titles
-  # raw_data_categories <- content(response_categories, "parsed")
-  # categories_yelp <- sapply(raw_data_categories$categories, function(category) {
-  #   if ("alias" %in% names(category)) {
-  #     unlist(category[["alias"]])
-  #   } else {
-  #     NA
-  #   }
-  # })
-  # 
-  # # Check if the category is in the list of accepted categories
-  # if (!(is.null(category) || category %in% unique(unlist(categories_yelp)))) {
-  #   stop("Invalid category. Please enter only one accepted category on Yelp.")
-  # }
+  # Define the URL for categories endpoint
+  url_categories <- paste0(domain, "/categories")
+
+  # Make request to categories endpoint
+  response_categories <- GET(url_categories, add_headers(Authorization = token))
+
+  # Check if the request was successful
+  if (status_code(response_categories) != 200) {
+    stop("Failed to retrieve categorical data.")
+  }
+
+  # Extracting category titles
+  raw_data_categories <- content(response_categories, "parsed")
+  categories_yelp <- sapply(raw_data_categories$categories, function(category) {
+    if ("alias" %in% names(category)) {
+      unlist(category[["alias"]])
+    } else {
+      NA
+    }
+  })
+
+  # Check if the category is in the list of accepted categories
+  if (!(is.null(category) || category %in% unique(unlist(categories_yelp)))) {
+    stop("Invalid category. Please enter only one accepted category on Yelp.")
+  }
   
   # Create a dictionary to store parameters
   parameters <- list(
@@ -99,35 +109,34 @@ analyze_cities <- function(api_key = NULL, cities = NULL, category = NULL, limit
     response <- GET(url_businesses, add_headers(Authorization = token), query = parameters_used_city)
     
     # Check if the request was successful
-    if (status_code(response) == 200) {
-      # Extract the requested data
-      raw_data <- content(response, encoding = "UTF-8", as = "text") %>%
-        fromJSON(simplifyVector = TRUE) %>%
-        `[[`("businesses")
-      
-      # Create a DataFrame
-      df_businesses <- as.data.frame(raw_data)
-      
-      # Select the columns of interest
-      if ('price' %in% names(df_businesses)) {
-        df_ratings <- df_businesses %>%
-          select(name, review_count, rating, price)
-        
-        # Convert price column to factor and factorize the values
-        df_ratings$price_factor <- as.factor(df_ratings$price)
-        levels(df_ratings$price_factor) <- c("$" = 1, "$$" = 2, "$$$" = 3, "nan" = NA)
-      } else {
-        # If 'price' column doesn't exist, load remaining columns
-        df_ratings <- df_businesses %>%
-          select(name, review_count, rating)
-      }
-      
-      # Store dataframe for each city
-      city_results[[city]] <- df_ratings
-    } else {
-      # Failed to retrieve data for this city
-      warning(paste("Failed to retrieve data for", city))
+    if (status_code(response) != 200) {
+      stop("Failed to retrieve data.")
     }
+
+    # Extract the requested data
+    raw_data <- content(response, encoding = "UTF-8", as = "text") %>%
+      fromJSON(simplifyVector = TRUE) %>%
+      `[[`("businesses")
+    
+    # Create a DataFrame
+    df_businesses <- as.data.frame(raw_data)
+    
+    # Select the columns of interest
+    if ('price' %in% names(df_businesses)) {
+      df_ratings <- df_businesses %>%
+        select(name, review_count, rating, price)
+      
+      # Convert price column to factor and factorize the values
+      df_ratings$price_factor <- as.factor(df_ratings$price)
+      levels(df_ratings$price_factor) <- c("$" = 1, "$$" = 2, "$$$" = 3, "nan" = NA)
+    } else {
+      # If 'price' column doesn't exist, load remaining columns
+      df_ratings <- df_businesses %>%
+        select(name, review_count, rating)
+    }
+    
+    # Store dataframe for each city
+    city_results[[city]] <- df_ratings
   }
   
   # Combine dataframes for all cities into one dataframe

@@ -9,6 +9,9 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Date: 2024/02/05  
+- Added unit tests to second function analyze_business_sectors  
+
 Date: 2024/02/03  
 - Modified subplots to exclude y-axis ticks and density scales  
 - Created corrected example plots (sorted vector fix for plot mapping)  
