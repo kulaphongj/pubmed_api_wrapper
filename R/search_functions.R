@@ -1,0 +1,67 @@
+# Load the necessary setup configurations and libraries
+source("setup.R")
+
+#' Search Businesses on Yelp
+#'
+#' This function queries the Yelp Fusion API to search for businesses based on specified criteria.
+#' It constructs a request with the provided parameters and fetches business data from Yelp.
+#'
+#' @param api_key string containing the Yelp API key for authorization.
+#' @param location string specifying the location to search for businesses.
+#' @param business_type string specifying the type of business (e.g., restaurants, bars).
+#' @param keyword string specifying additional search keywords (e.g., "pizza", "coffee").
+#' @param offset integer specifying the offset for pagination (default is 0).
+#' @param limit integer specifying the maximum number of results to return (default is 50, max is 50 as per Yelp API limits).
+#' @return A list of businesses matching the search criteria if successful; NULL otherwise.
+#' @examples
+#' search_businesses(api_key, "San Francisco", "food", "pizza")
+search_businesses <- function(api_key, location, business_type, keyword, offset = 0, limit = 50) {
+  # Construct the request URL and headers for Yelp API
+  url <- 'https://api.yelp.com/v3/businesses/search'
+  headers <- add_headers('Authorization' = sprintf('Bearer %s', api_key))
+  # Set query parameters with the function's arguments
+  params <- list(location = location, term = paste(business_type, keyword), limit = limit, offset = offset)
+  # Perform the GET request to Yelp API
+  response <- httr::GET(url, headers, query = params)
+  # Check response status and parse content if successful
+  if (httr::status_code(response) == 200) {
+    content <- httr::content(response, type = "text", encoding = "UTF-8")
+    return(fromJSON(content)$businesses)
+  } else {
+    # Handle error by printing status code and returning NULL
+    print(paste('Error:', httr::status_code(response)))
+    return(NULL)
+  }
+}
+
+#' Retrieve All Businesses Matching Criteria
+#'
+#' This function iterates over paginated search results from the Yelp Fusion API, collecting all businesses
+#' that match the search criteria up to a specified total number of businesses.
+#'
+#' @param api_key string containing the Yelp API key for authorization.
+#' @param location string specifying the location to search for businesses.
+#' @param business_type string specifying the type of business to search for.
+#' @param keyword string specifying additional search keywords.
+#' @param total integer specifying the total number of businesses to attempt to retrieve (default is 1000).
+#' @return A dataframe of all businesses matching the search criteria, up to the specified total.
+#' @examples
+#' get_all_businesses(api_key, "San Francisco", "food", "pizza", total = 200)
+get_all_businesses <- function(api_key, location, business_type, keyword, total = 1000) {
+  results <- list()
+  # Loop through search results in increments of 50 (API limit) until reaching 'total' count
+  for (offset in seq(0, total, by = 50)) {
+    # Call the search function with current offset
+    partial_results <- search_businesses(api_key, location, business_type, keyword, offset, 50)
+    # Check if results were returned and add to the cumulative results list
+    if (!is.null(partial_results) && length(partial_results) > 0) {
+      results <- c(results, list(partial_results))
+    } else {
+      # Exit loop if no more results are found
+      break
+    }
+  }
+  # Combine all partial results into a single dataframe
+  all_businesses_df <- bind_rows(results)
+  return(all_businesses_df)
+}
