@@ -6,7 +6,7 @@
 #'
 #' @param df_loc A dataframe containing location data, including latitude, longitude, and other factors.
 #'               
-#' @param factor_plot The factor to be represented by the heatmap. The available factors are price_factor, rating, and review_count.
+#' @param factor_plot The factor to be represented by the heatmap. The available factors are price_factor, rating, review_count, and weighted_rating_review
 #'
 #' @return A Plotly interactive heatmap.
 #'
@@ -40,6 +40,14 @@ create_geo_heatmap <- function(df_loc, factor_plot) {
   numeric_columns <- c('review_count', 'rating', 'distance', 'latitude', 'longitude')
   df_business_factors[numeric_columns] <- lapply(df_business_factors[numeric_columns], as.numeric)
   
+  # add weighted factor (weighted_rating_review <- ratings * (review_count/max(review_count)))
+  df_business_factors$weighted_rating_review <- (df_business_factors$rating/max(df_business_factors$rating)) * (df_business_factors$review_count/max(df_business_factors$review_count))
+  
+  # Normalize weights for visualization
+  min_weight <- min(df_business_factors$weighted_rating_review)
+  max_weight <- max(df_business_factors$weighted_rating_review)
+  df_business_factors$weighted_rating_review <- (df_business_factors$weighted_rating_review - min_weight) / (max_weight - min_weight) * 4 + 1
+  
   # add name to place if they have many branches
   df_business_factors <- df_business_factors %>%
     arrange(name) %>%
@@ -68,10 +76,10 @@ create_geo_heatmap <- function(df_loc, factor_plot) {
   }else{
     ratio_size <- 0.7/max_val
   }
-
+  
   # Clean string
   factor_plot_clean <- toTitleCase(gsub("_", " ", factor_plot))
-
+  
   # Plot graph
   fig <- plot_ly(
     data = df_business_factors,
