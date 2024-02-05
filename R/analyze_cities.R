@@ -14,11 +14,6 @@
 #' analyze_cities(api_key = "your_api_key", location = c("Kelowna", "Penticton", "Red Deer"), categories = "food", limit = 33)
 
 analyze_cities <- function(api_key = NULL, location = NULL, categories = NULL, limit = 20) {
-  
-  # Print parameters for debugging
-  cat("API Key:", api_key, "\n")
-  cat("Location:", location, "\n")
-  cat("Categories:", categories, "\n")
 
   # Prompt user to enter API key if not provided
   while (is.null(api_key) || api_key == '') {
