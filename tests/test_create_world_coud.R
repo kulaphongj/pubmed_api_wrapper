@@ -37,14 +37,10 @@ test_that("create_word_cloud stops with NA values in data", {
 
 # Test with empty data
 test_that("create_word_cloud handles empty data gracefully", {
-  empty_data <- data.frame(
-    name = character(),
-    rating = numeric(),
-    review_count = numeric()
-  )
-
-  # Expect function to print or save without error but check if handling is as expected
-  expect_silent(create_word_cloud(empty_data, FALSE))
+  empty_data <- data.frame(name = character(),
+                           rating = numeric(),
+                           review_count = numeric())
+  expect_warning(create_word_cloud(empty_data, FALSE))
 })
 
 # Test with extreme data values
