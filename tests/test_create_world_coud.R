@@ -2,7 +2,7 @@ library(testthat)
 library(htmlwidgets) # Required for testing if the output is a saved HTML widget
 
 # Assuming 'search_functions.R' defines the 'create_word_cloud' function
-source("create_word_cloud.R")
+source("../R/create_word_cloud.R")
 
 context("Testing create_word_cloud function")
 
