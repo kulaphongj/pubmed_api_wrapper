@@ -41,9 +41,7 @@ print(all_businesses)
 ```
 
 The variable `all_businesses` will be a dataframe that includes the following columns: "id", "alias", "name", "image_url", "is_closed", "url", "review_count", "categories", "rating", "coordinates", "transactions", "price", "location", "phone", "display_phone", "distance". Use this to view the business details, gather summary statistics and exploratory analysis, and/or create custom visualizations to suit your needs.  
-
-
-
+<br><br><br>
 >>> ```  
 >>> search_businesses  
 >>> ```  
@@ -72,9 +70,7 @@ print(businesses)
 2  mSMZJj2pFvttWLpcDmgrEA                         tonys-pizza-napoletana-san-francisco                       Tony's Pizza Napoletana
 3  PTFxtXS47ZVRCdZIrEWvGw                               golden-boy-pizza-san-francisco                              Golden Boy Pizza
 ```
-
-
-
+<br><br><br>
 >>> ```  
 >>> create_word_cloud  
 >>> ```  
@@ -93,9 +89,7 @@ create_word_cloud(df_businesses, TRUE, "my_wordcloud.html")
 ```  
 
 ![Word Cloud Visualization](img/word_cloud.png)
-
-
-
+<br><br><br>
 >>> ```  
 >>> create_geo_heatmap  
 >>> ```  
@@ -114,9 +108,7 @@ heatmap
 ```  
 
 ![Heatmap Visualization](img/heatmap_vancouver.png)  
-
-
-
+<br><br><br>
 >>> ```  
 >>> analyze_cities  
 >>> ```  
@@ -141,9 +133,7 @@ result_cities$plot_facetted
 The variable `result_cities` will return a dataframe containing all the golf businesses in each city, the parameters used, and 2 plots (either facetted for separate comparisons, or interactive for an in-depth analysis).  
 
 ![Golf Business Ratings in Cities](example_plots/golf_worldwide_facetted.png)  
-
-
-
+<br><br><br>
 >>> ```  
 >>> analyze_business_sectors  
 >>> ```  
