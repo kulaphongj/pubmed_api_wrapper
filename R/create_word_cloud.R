@@ -1,5 +1,6 @@
 # Load the search functions required for data retrieval
 source("search_functions.R")
+source("get_all_businesses.R")
 
 #' Create a Word Cloud from Yelp Business Data
 #'
