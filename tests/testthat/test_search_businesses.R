@@ -10,7 +10,7 @@ library(htmlwidgets)
 context("search_businesses Functionality")
 
 test_that("search_businesses returns a list on success", {
-  api_key <- '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mKo4x2YzHsOonykbo7ajvVvWzGmjK0SpVxfGXmXqDWPu9Qivdyx-OjyewZXYx'
+  api_key <- 'TpL2Xxv5ezpTSAxUUpuUIMLXM1fv0nFu9g3VyTUD_FhbkHG9OD322THyJSW_b30QMqRbvIdfqmLIDqTFNf7hxl-aXOcXzgii6H7_Wirdj5BOVniojDjRFpPEiyewZXYx'
   location <- "San Francisco"
   business_type <- "restaurant"
   keyword <- "pizza"

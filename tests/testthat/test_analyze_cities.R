@@ -11,7 +11,7 @@ library(stringr)
 
 # Test for successful API request
 test_that("Function retrieves data for each city", {
-  api_key <- '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mKo4x2YzHsOonykbo7ajvVvWzGmjK0SpVxfGXmXqDWPu9Qivdyx-OjyewZXYx'
+  api_key <- 'TpL2Xxv5ezpTSAxUUpuUIMLXM1fv0nFu9g3VyTUD_FhbkHG9OD322THyJSW_b30QMqRbvIdfqmLIDqTFNf7hxl-aXOcXzgii6H7_Wirdj5BOVniojDjRFpPEiyewZXYx'
   location <- c('Kelowna', 'Penticton', 'Red Deer')
   categories <- 'food'
   result <- analyze_cities(api_key, location, categories, 20)
@@ -29,7 +29,7 @@ test_that("Function retrieves data for each city", {
 
 # Test for API request failure handling with invalid city
 test_that("Function handles API request failures", {
-  api_key <- '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mKo4x2YzHsOonykbo7ajvVvWzGmjK0SpVxfGXmXqDWPu9Qivdyx-OjyewZXYx'
+  api_key <- 'TpL2Xxv5ezpTSAxUUpuUIMLXM1fv0nFu9g3VyTUD_FhbkHG9OD322THyJSW_b30QMqRbvIdfqmLIDqTFNf7hxl-aXOcXzgii6H7_Wirdj5BOVniojDjRFpPEiyewZXYx'
   location <- c('Kelowna', 'Invalid City', 'Red Deer')
   categories <- 'food'
   expect_error(analyze_cities(api_key, location, categories, 20), "Failed to retrieve data.")
@@ -37,7 +37,7 @@ test_that("Function handles API request failures", {
 
 # Test for plot generation
 test_that("Plot is generated without errors", {
-  api_key <- '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mKo4x2YzHsOonykbo7ajvVvWzGmjK0SpVxfGXmXqDWPu9Qivdyx-OjyewZXYx'
+  api_key <- 'TpL2Xxv5ezpTSAxUUpuUIMLXM1fv0nFu9g3VyTUD_FhbkHG9OD322THyJSW_b30QMqRbvIdfqmLIDqTFNf7hxl-aXOcXzgii6H7_Wirdj5BOVniojDjRFpPEiyewZXYx'
   location <- c('Kelowna', 'Penticton', 'Red Deer')
   categories <- 'food'
   result <- analyze_cities(api_key, location, categories, 20)
@@ -68,7 +68,7 @@ test_that("Plot is generated without errors", {
 
 # Test for plotly part
 test_that("Plotly plot is generated without errors", {
-  api_key <- '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mKo4x2YzHsOonykbo7ajvVvWzGmjK0SpVxfGXmXqDWPu9Qivdyx-OjyewZXYx'
+  api_key <- 'TpL2Xxv5ezpTSAxUUpuUIMLXM1fv0nFu9g3VyTUD_FhbkHG9OD322THyJSW_b30QMqRbvIdfqmLIDqTFNf7hxl-aXOcXzgii6H7_Wirdj5BOVniojDjRFpPEiyewZXYx'
   location <- c('Kelowna', 'Penticton', 'Red Deer')
   categories <- 'food'
   result <- analyze_cities(api_key, location, categories, 20)

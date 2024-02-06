@@ -7,3 +7,14 @@ export(
   analyze_business_sectors,
   analyze_cities
 )
+import(
+  httr,
+  jsonlite,
+  dplyr,
+  ggplot2,
+  tools,
+  plotly,
+  stringr,
+  RColorBrewer,
+  wordcloud2
+)

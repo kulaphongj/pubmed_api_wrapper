@@ -3,7 +3,7 @@ Type: Package
 Title: Wrap Yelp APIS for visualization of the interesting businesses in the specific area.
 Version: 0.1.0
 Author: Nijiati Abulizi, Kulaphong Jitareerat, Craig Adlam
-Maintainer: Nijiati Abulizi, Kulaphong Jitareerat, Craig Adlam
+Maintainer: Nijiati Abulizi <Nijiati@email.com>, Kulaphong Jitareerat <Nijiati@email.com>, Craig Adlam <Nijiati@email.com>
 Description:
     The "yelpviz" package is designed to simplify the process of accessing Yelp APIs and 
     visualizing interesting businesses within a specific area. 
