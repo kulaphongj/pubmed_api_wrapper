@@ -28,6 +28,9 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 library(stringr)
+library(tools)
+library(RColorBrewer)
+library(wordcloud2)
 ```
 
 ### analyze_cities()
@@ -228,5 +231,40 @@ print(category_means)
 10 shopping                  4.18        4.65
 ```
 
+
+### create_geo_heatmap()
+
+To analyze the specific businesses in an area by displaying a map with heat map of the factor values, including rating, price, review_counts, and weighted rating and review count, call the `create_geo_heatmap()` with data returned by the `get_all_businesses()` and an interesting factor. This will plot the a map with gradient color bubbles for each businesses.  
+
+**Required parameters**
+
+| Parameter    | Description              | Default |
+|--------------|--------------------------|---------|
+| `df_loc`     | data returned by `get_all_businesses`| NULL    |
+| `factor_plot`| factor for plotting      | NULL    |
+
+
+```{r}
+# Enter the Yelp API key and specify multiple categories in a vector
+api_key <- <<<ENTER API KEY HERE>>>
+
+# Get data from the get_all_businesses function
+df_business <- get_all_businesses(api_key, "Vancouver", "Restaurant", "italian")
+
+# Create visualization of geo-heatmap
+fig <- create_geo_heatmap(df_business, factor_plot="price_factor")
+fig
+# fig2 <- create_geo_heatmap(df_business, factor_plot="review_count")
+# fig2
+# fig3 <- create_geo_heatmap(df_business, factor_plot="rating")
+# fig3
+# fig4 <- create_geo_heatmap(df_business, factor_plot="weighted_rating_review")
+# fig4
+```
+
+**Example output of the plots:**
+
+::: {style="display: flex; justify-content: center;"}
+![Vancouver Restaurant Italian Price Factor](../img/heatmap_vancouver.png){width="40%"}
 
 
