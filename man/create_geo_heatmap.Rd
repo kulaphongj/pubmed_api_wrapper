@@ -10,7 +10,7 @@ This function creates a geographic heatmap using the Plotly library in R. It tak
 \arguments{
 \item{df_loc}{A dataframe containing location data, including latitude, longitude, and other factors.}
 
-\item{factor_plot}{The factor to be represented by the heatmap. The available factors are price_factor, rating, and review_count.}
+\item{factor_plot}{The factor to be represented by the heatmap. The available factors are price_factor, rating, review_count, and weighted_rating_review.}
 }
 \value{A Plotly interactive heatmap.}
 \examples{

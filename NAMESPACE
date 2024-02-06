@@ -1,4 +1,9 @@
 exportPattern("^[[:alpha:]]+")
 export(
-  create_geo_heatmap
+  search_businesses,
+  get_all_businesses,
+  create_word_cloud,
+  create_geo_heatmap,
+  analyze_business_sectors,
+  analyze_cities
 )

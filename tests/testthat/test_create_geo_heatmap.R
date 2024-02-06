@@ -3,8 +3,8 @@ library(tools)
 library(plotly)
 library(dplyr)
 
-source("../R/create_geo_heatmap.R")
 
+context("Testing Create Geo Heatmap functionality")
 
 test_that("Test for create_geo_heatmap function", 
   {

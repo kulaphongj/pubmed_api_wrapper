@@ -12,6 +12,7 @@ library(stringr)
 # Test for correct parameters being used, successful API request, data for each category, 
 # correct columns in the dataframe, and price factorization
 test_that("Output is a list with combined dataframe, parameters, and plots", {
+  api_key <- '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mKo4x2YzHsOonykbo7ajvVvWzGmjK0SpVxfGXmXqDWPu9Qivdyx-OjyewZXYx'
   location <- 'Kelowna'
   categories <- sort(c('food', 'gyms', 'golf'))
   result <- analyze_business_sectors(api_key, location, categories, 20)
@@ -29,6 +30,7 @@ test_that("Output is a list with combined dataframe, parameters, and plots", {
 
 # Test for API request failure handling with invalid city
 test_that("Function handles API request failures", {
+  api_key <- '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mKo4x2YzHsOonykbo7ajvVvWzGmjK0SpVxfGXmXqDWPu9Qivdyx-OjyewZXYx'
   location <- 'Invalid City'
   categories <- c('food', 'gyms', 'golf')
   expect_error(analyze_business_sectors(api_key, location, categories, 20), "Failed to retrieve data.")
@@ -36,6 +38,7 @@ test_that("Function handles API request failures", {
 
 # Test for ggplot generation
 test_that("Plot is generated without errors", {
+  api_key <- '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mKo4x2YzHsOonykbo7ajvVvWzGmjK0SpVxfGXmXqDWPu9Qivdyx-OjyewZXYx'
   location <- 'Kelowna'
   categories <- c('food', 'gyms', 'golf')
   result <- analyze_business_sectors(api_key, location, categories, 20)
@@ -71,6 +74,7 @@ test_that("Plot is generated without errors", {
 
 # Test for plotly plot generation
 test_that("Plotly plot is generated without errors", {
+  api_key <- '8Jo6kJG76tJHDooxSbrcpFOm1dW2DTKJBQ_sNZuqHDn5FMmNTHe4xTuJXSblClvr5o6mKo4x2YzHsOonykbo7ajvVvWzGmjK0SpVxfGXmXqDWPu9Qivdyx-OjyewZXYx'
   categories <- c('food', 'gyms', 'golf')  # Define categories
   result <- analyze_business_sectors(api_key, 'Kelowna', categories, 20)  # Call the function
   

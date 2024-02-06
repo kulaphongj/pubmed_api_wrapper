@@ -3,7 +3,7 @@ Type: Package
 Title: Wrap Yelp APIS for visualization of the interesting businesses in the specific area.
 Version: 0.1.0
 Author: Nijiati Abulizi, Kulaphong Jitareerat, Craig Adlam
-Maintainer: The package maintainer <yourself@somewhere.net>
+Maintainer: Nijiati Abulizi, Kulaphong Jitareerat, Craig Adlam
 Description:
     The "yelpviz" package is designed to simplify the process of accessing Yelp APIs and 
     visualizing interesting businesses within a specific area. 
@@ -22,9 +22,15 @@ Suggests:
   testthat
 RoxygenNote: 7.3.1
 Imports:
+  devtools,
+  testthat,
   httr,
   jsonlite,
   dplyr,
   tools,
-  plotly
+  plotly,
+  stringr,
+  wordcloud2,
+  RColorBrewer,
+  htmlwidgets
 URL: https://github.com/kulaphongj/yelp_api_wrapper

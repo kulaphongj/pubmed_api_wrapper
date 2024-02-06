@@ -1,7 +1,3 @@
-# Load the search functions required for data retrieval
-source("search_functions.R")
-source("get_all_businesses.R")
-
 #' Create a Word Cloud from Yelp Business Data
 #'
 #' This function generates a word cloud visualization based on the names of businesses,
@@ -16,6 +12,7 @@ source("get_all_businesses.R")
 #'        Defaults to "wordcloud.html".
 #' @return Generates a word cloud and either saves it to a file or prints it, based on the
 #'         `save_to_file` parameter.
+#' @import httr jsonlite dplyr RColorBrewer wordcloud2 htmlwidgets
 #' @examples
 #' # Assuming `business_data` is a dataframe with Yelp business info
 #' create_word_cloud(business_data, TRUE, "my_wordcloud.html")

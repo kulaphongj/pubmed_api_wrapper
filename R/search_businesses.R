@@ -1,6 +1,3 @@
-# Load the necessary setup configurations and libraries
-source("setup.R")
-
 #' Search Businesses on Yelp
 #'
 #' This function queries the Yelp Fusion API to search for businesses based on specified criteria.
@@ -13,6 +10,7 @@ source("setup.R")
 #' @param offset integer specifying the offset for pagination (default is 0).
 #' @param limit integer specifying the maximum number of results to return (default is 50, max is 50 as per Yelp API limits).
 #' @return A list of businesses matching the search criteria if successful; NULL otherwise.
+#' @import httr jsonlite dplyr RColorBrewer wordcloud2 htmlwidgets
 #' @examples
 #' search_businesses(api_key, "San Francisco", "food", "pizza")
 search_businesses <- function(api_key, location, business_type, keyword, offset = 0, limit = 50) {

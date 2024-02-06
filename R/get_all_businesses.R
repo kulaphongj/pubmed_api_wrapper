@@ -1,7 +1,3 @@
-# Load the necessary setup configurations and libraries
-source("setup.R")
-source("search_businesses.R")
-
 #' Retrieve All Businesses Matching Criteria
 #'
 #' This function iterates over paginated search results from the Yelp Fusion API, collecting all businesses
@@ -13,6 +9,7 @@ source("search_businesses.R")
 #' @param keyword string specifying additional search keywords.
 #' @param total integer specifying the total number of businesses to attempt to retrieve (default is 1000).
 #' @return A dataframe of all businesses matching the search criteria, up to the specified total.
+#' @import httr jsonlite dplyr RColorBrewer wordcloud2 htmlwidgets
 #' @examples
 #' get_all_businesses(api_key, "San Francisco", "food", "pizza", total = 200)
 get_all_businesses <- function(api_key, location, business_type, keyword, total = 1000) {

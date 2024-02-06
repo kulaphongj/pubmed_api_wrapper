@@ -1,8 +1,13 @@
 library(testthat)
 library(htmlwidgets) # Required for testing if the output is a saved HTML widget
-
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(RColorBrewer)
+library(wordcloud2)
+library(htmlwidgets)
 # Assuming 'search_functions.R' defines the 'create_word_cloud' function
-source("../R/create_word_cloud.R")
+# source("../R/create_word_cloud.R")
 
 context("Testing create_word_cloud function")
 
