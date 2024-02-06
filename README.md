@@ -1,8 +1,7 @@
-<img src="img/yelp_logo_word_transparent.png" alt="YelpViz" align="left" width="100"/>  
-
-<p align="center">
-  <h1>YelpViz</h1>
-</p>
+<div align="center">
+    <img src="img/yelp_logo_word_transparent.png" alt="YelpViz" align="left" width="100"/>  
+    <h1>YelpViz</h1>
+</div>
 
 ##### ***The goal of YelpViz is to simplify the visualization process by retrieving business-related information using Yelp's API and providing plotted charts for analysis.***
 > ```
