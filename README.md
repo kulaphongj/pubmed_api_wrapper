@@ -1,7 +1,12 @@
-<img src="img/yelp_logo_word_transparent.png" alt="YelpViz" align="left" width="100"/>  
+<img src="image_url" alt="YelpViz" align="left" width="100"/>  
+
+<center>
 
 # YelpViz
-### ***The goal of YelpViz is to simplify the visualization process by retrieving business-related information using Yelp's API and providing plotted charts for analysis.***
+
+</center>
+
+##### ***The goal of YelpViz is to simplify the visualization process by retrieving business-related information using Yelp's API and providing plotted charts for analysis.***
 > ```
 > Please ensure that you follow the instructions and refer to the vignette for more details.
 > ```
@@ -18,26 +23,34 @@ To explore different cities and businesses, simply:
 
 Once you have completed the steps above,  you may utilize the following 6 functions.
 
-##### `search_businesses`  
+> ```  
+> get_all_businesses  
+> ```  
+
 This function queries the Yelp Fusion API to search for businesses based on specified criteria. It constructs a request with the provided parameters and fetches business data from Yelp.  
-```search_businesses(api_key, location, business_type, keyword, offset = 0, limit = 50)```  
+
+```get_all_businesses(api_key, location, business_type, keyword, total = 1000)```  
 
 - api_key: A string containing the Yelp API key for authorization  
 - location: A string specifying the location to search for businesses  
 - business_type: A string specifying the type of business (e.g., restaurants, bars)  
 - keyword: A string specifying additional search keywords (e.g., "pizza", "coffee")  
-- offset: An integer specifying the offset for pagination. The default is 0  
-- limit: An integer specifying the maximum number of results to return. The default is 50, and the maximum is 50 as per Yelp API limits  
+- total: An integer specifying the total number of businesses to attempt to retrieve. The default is 1000  
 
 ```
-\# Example usage
-df_businesses <- search_businesses("your_api_key", "San Francisco", "food", "pizza")
-print(businesses)
+# Example usage
+all_businesses <- get_all_businesses("your_api_key", "San Francisco", "food", "pizza", total = 200)
+print(all_businesses)
 ```
 
-The variable `df_businesses` will be a dataframe that includes the following columns: "id", "alias", "name", "image_url", "is_closed", "url", "review_count", "categories", "rating", "coordinates", "transactions", "price", "location", "phone", "display_phone", "distance". Use this to view the business details, gather summary statistics and exploratory analysis, and/or create custom visualizations to suit your needs.  
+The variable `all_businesses` will be a dataframe that includes the following columns: "id", "alias", "name", "image_url", "is_closed", "url", "review_count", "categories", "rating", "coordinates", "transactions", "price", "location", "phone", "display_phone", "distance". Use this to view the business details, gather summary statistics and exploratory analysis, and/or create custom visualizations to suit your needs.  
 
-#####`search_businesses`  
+
+
+> ```  
+> search_businesses  
+> ```  
+
 This function queries the Yelp Fusion API to search for businesses based on specified criteria. It constructs a request with the provided parameters and fetches business data from Yelp, returning a list of businesses that match the search criteria.  
 
 `search_businesses(api_key, location, business_type, keyword, offset = 0, limit = 50)`
@@ -50,7 +63,7 @@ This function queries the Yelp Fusion API to search for businesses based on spec
 - limit: An integer specifying the maximum number of results to return. The default is 50, and the maximum is 50 as per Yelp API limits  
 
 ```
-\# Example usage
+# Example usage
 businesses <- search_businesses("your_api_key", "San Francisco", "food", "pizza")
 print(businesses)
 ```
@@ -63,7 +76,12 @@ print(businesses)
 3  PTFxtXS47ZVRCdZIrEWvGw                               golden-boy-pizza-san-francisco                              Golden Boy Pizza
 ```
 
-##### `create_word_cloud`  
+
+
+> ```  
+> create_word_cloud  
+> ```  
+
 This function generates a word cloud visualization based on the names of businesses, weighted by their ratings and number of reviews. The visualization highlights popular and highly rated businesses more prominently.  
 
 `create_word_cloud(data, save_to_file = FALSE, filename = "wordcloud.html")`  
@@ -73,13 +91,18 @@ This function generates a word cloud visualization based on the names of busines
 - filename: The name of the file to save the word cloud HTML if save_to_file is TRUE. Defaults to "wordcloud.html"  
 
 ```
-\# Example usage
+# Example usage
 create_word_cloud(df_businesses, TRUE, "my_wordcloud.html")
 ```  
 
 ![Word Cloud Visualization](img/word_cloud.png)
 
-##### `create_geo_heatmap`  
+
+
+> ```  
+> create_geo_heatmap  
+> ```  
+ 
 This function creates a geographic heatmap using the Plotly library in R. It takes a dataframe with latitude, longitude, and other relevant data from the function get_all_businesses(), and produces an interactive map.  
 
 `create_geo_heatmap(df_loc, factor_plot)`  
@@ -88,14 +111,19 @@ This function creates a geographic heatmap using the Plotly library in R. It tak
 - factor_plot: The factor to be represented by the heatmap. The available factors are price_factor, rating, review_count, and weighted_rating_review  
 
 ```
-\# Example usage
-heatmap <- create_geo_heatmap(df, "price_factor")
+# Example usage
+heatmap <- create_geo_heatmap(all_businesses, "price_factor")
 heatmap
 ```  
 
 ![Heatmap Visualization](img/heatmap_vancouver.png)  
 
-##### `analyze_cities`  
+
+
+> ```  
+> analyze_cities  
+> ```  
+
 This function retrieves business data from Yelp API for specified cities and category, analyzes the ratings, and generates facetted and interactive plots.  
 
 `analyze_cities(api_key = NULL, location = NULL, categories = NULL, limit = 20)`  
@@ -106,7 +134,7 @@ This function retrieves business data from Yelp API for specified cities and cat
 - limit: An integer specifying the maximum number of businesses to retrieve per city. Default is 20  
 
 ```
-\# Example usage with cities  
+# Example usage with cities  
 api_key <- '<<<ENTER API KEY HERE>>>'
 location <- c('Kelowna', 'Seattle', 'London', 'Tokyo', 'Calgary', 'Vancouver', 'Toronto', 'Portland', 'New York City', 'San Francisco')
 result_cities <- analyze_cities(api_key, location, 'golf', 33)
@@ -117,7 +145,12 @@ The variable `result_cities` will return a dataframe containing all the golf bus
 
 ![Golf Business Ratings in Cities](example_plots/golf_worldwide_facetted.png)  
 
-##### `analyze_business_sectors`  
+
+
+> ```  
+> analyze_business_sectors  
+> ```  
+
 This function retrieves business data from Yelp API for a specified city and categories, analyzes the ratings, and generates facetted and interactive plots.  
 
 `analyze_business_sectors(api_key = NULL, location = NULL, categories = NULL, limit = 20)`  
@@ -128,7 +161,7 @@ This function retrieves business data from Yelp API for a specified city and cat
 - limit: An integer specifying the maximum number of businesses to retrieve per category. Default is 20  
 
 ```
-\# Example usage with categories
+# Example usage with categories
 api_key <- '<<<ENTER API KEY HERE>>>'
 categories <- c('food', 'gyms', 'golf', 'shopping', 'hotelstravel', 'nightlife', 'casinos', 'airports', 'roofing', 'plumbing')
 result_sectors <- analyze_business_sectors(api_key, 'Kelowna', categories, 33)
