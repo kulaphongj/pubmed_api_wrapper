@@ -9,7 +9,17 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Date: 2024/02/05  
+Date: 2024/02/06  
+- Finalized README.md documentation to include all functions with examples  
+- Reviewed CONTRIBUTING.md documentation  
+- Took out old format for analyze_cities.Rd that was still in code
+
+Date: 2024/02/05 - Afternoon  
+- Finalized group presentation powerpoint slides  
+- Fixed test files for analyze functions  
+- Condensed multiple unit tests into one API request call 
+
+Date: 2024/02/05 - Morning  
 - Added unit tests to second function analyze_business_sectors  
 - Added analyze_cities.Rd & analyze_business_sectors.Rd to 'man' directory  
 - Added roxygen2 documentation to analyze_cities.R & analyze_business_sectors.R  
