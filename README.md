@@ -1,4 +1,4 @@
-<img src="image_url" alt="YelpViz" align="left" width="100"/>  
+<img src="img/yelp_logo_word_transparent.png" alt="YelpViz" align="left" width="100"/>  
 
 <center>
 
