@@ -1,10 +1,8 @@
 <img src="img/yelp_logo_word_transparent.png" alt="YelpViz" align="left" width="100"/>  
 
-<center>
-
-# YelpViz
-
-</center>
+<p align="center">
+  <b>YelpViz</b>
+</p>
 
 ##### ***The goal of YelpViz is to simplify the visualization process by retrieving business-related information using Yelp's API and providing plotted charts for analysis.***
 > ```
@@ -23,9 +21,9 @@ To explore different cities and businesses, simply:
 
 Once you have completed the steps above,  you may utilize the following 6 functions.
 
-> ```  
-> get_all_businesses  
-> ```  
+>>> ```  
+>>> get_all_businesses  
+>>> ```  
 
 This function queries the Yelp Fusion API to search for businesses based on specified criteria. It constructs a request with the provided parameters and fetches business data from Yelp.  
 
@@ -47,9 +45,9 @@ The variable `all_businesses` will be a dataframe that includes the following co
 
 
 
-> ```  
-> search_businesses  
-> ```  
+>>> ```  
+>>> search_businesses  
+>>> ```  
 
 This function queries the Yelp Fusion API to search for businesses based on specified criteria. It constructs a request with the provided parameters and fetches business data from Yelp, returning a list of businesses that match the search criteria.  
 
@@ -78,9 +76,9 @@ print(businesses)
 
 
 
-> ```  
-> create_word_cloud  
-> ```  
+>>> ```  
+>>> create_word_cloud  
+>>> ```  
 
 This function generates a word cloud visualization based on the names of businesses, weighted by their ratings and number of reviews. The visualization highlights popular and highly rated businesses more prominently.  
 
@@ -99,9 +97,9 @@ create_word_cloud(df_businesses, TRUE, "my_wordcloud.html")
 
 
 
-> ```  
-> create_geo_heatmap  
-> ```  
+>>> ```  
+>>> create_geo_heatmap  
+>>> ```  
  
 This function creates a geographic heatmap using the Plotly library in R. It takes a dataframe with latitude, longitude, and other relevant data from the function get_all_businesses(), and produces an interactive map.  
 
@@ -120,9 +118,9 @@ heatmap
 
 
 
-> ```  
-> analyze_cities  
-> ```  
+>>> ```  
+>>> analyze_cities  
+>>> ```  
 
 This function retrieves business data from Yelp API for specified cities and category, analyzes the ratings, and generates facetted and interactive plots.  
 
@@ -147,9 +145,9 @@ The variable `result_cities` will return a dataframe containing all the golf bus
 
 
 
-> ```  
-> analyze_business_sectors  
-> ```  
+>>> ```  
+>>> analyze_business_sectors  
+>>> ```  
 
 This function retrieves business data from Yelp API for a specified city and categories, analyzes the ratings, and generates facetted and interactive plots.  
 
