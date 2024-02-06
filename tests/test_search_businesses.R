@@ -1,7 +1,5 @@
 library(testthat)
-source("search_functions.R")
-
-source("../R/search_functions.R")
+source("../R/search_businesses.R")
 
 context("search_businesses Functionality")
 
