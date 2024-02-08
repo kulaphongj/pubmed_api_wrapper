@@ -17,10 +17,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Installation of the package:
 ```{r}
+library(remotes)
+install_github("kulaphongj/yelp_api_wrapper")
+```
+
+Import library:
+```{r}
 library(yelpviz)
 ```
 
-Install required libraries:
+Import Extra libraries:
 ```{r}
 library(httr)
 library(jsonlite)

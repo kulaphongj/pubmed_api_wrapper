@@ -5,6 +5,9 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+Data: 2024/02/08
+- Tested installation from GitHub (Publishing)
+
 Date: 2024/02/06  
 - Fixed load library dependencies.
 - Added information into README, and vignette.

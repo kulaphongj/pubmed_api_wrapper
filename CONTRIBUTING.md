@@ -7,7 +7,7 @@ All group members utilized a simple branching model that revolved around a singl
 
 Nijiati Abulizi:  create_word_cloud, get_all_businesses, search_businesses; presentation material
 
-Kulaphong Jitareerat: create_geo_heatmap; GitHub Action, R package build
+Kulaphong Jitareerat: create_geo_heatmap; GitHub Action, R package build and publish
 
 Craig Adlam: analyze_cities, analyze_business_sectors; README  
 

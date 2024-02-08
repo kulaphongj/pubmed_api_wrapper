@@ -8,6 +8,13 @@
 ---
 ## Package Status & Installation  
 ![R Package: GitHub Action CI](https://github.com/kulaphongj/yelp_api_wrapper/actions/workflows/yelpviz.yml/badge.svg)  
+
+##### Installation via GitHub
+```
+library(remotes)
+install_github("kulaphongj/yelp_api_wrapper")
+```
+
 ##### Coverage: 85.48% - 6 functions total included in the `yelpviz_0.1.0.tar.gz` package archive file  
 
 To explore different cities and businesses, simply:  
