@@ -220,14 +220,14 @@ print(category_means)
    Category     mean_review_count mean_rating
    <chr>                    <dbl>       <dbl>
  1 airports                 23           3.25
- 2 casinos                   4.4         2.1 
+ 2 casinos                   4.4         2.1
  3 food                     33.2         4.38
  4 golf                      5           3.55
  5 gyms                      3.59        3.59
  6 hotelstravel             13.3         4.17
  7 nightlife                46.1         3.86
  8 plumbing                  2.83        3.07
- 9 roofing                   1.9         2.5 
+ 9 roofing                   1.9         2.5
 10 shopping                  4.18        4.65
 ```
 
@@ -268,3 +268,66 @@ fig
 ![Vancouver Restaurant Italian Price Factor](../img/heatmap_vancouver.png){width="40%"}
 
 
+### get_all_businesses()
+
+To retrieve all businesses matching specific criteria from the Yelp Fusion API, use the `get_all_businesses()` function. This function iterates over paginated search results, collecting businesses that match the given search criteria up to a specified total number of businesses.
+
+**Required Parameters**
+
+| Parameter       | Description                                               | Default |
+|-----------------|-----------------------------------------------------------|---------|
+| `api_key`       | String containing the Yelp API key for authorization.     | NULL    |
+| `location`      | String specifying the location to search for businesses.  | NULL    |
+| `business_type` | String specifying the type of business to search for.     | NULL    |
+| `keyword`       | String specifying additional search keywords.             | NULL    |
+| `total`         | Integer specifying the total number of businesses to retrieve. | 1000  |
+
+**Example Usage**
+
+```r
+api_key <- "<<<ENTER API KEY HERE>>>"
+df_businesses <- get_all_businesses(api_key, "San Francisco", "food", "pizza", total = 1000)
+```
+
+## search_businesses()
+
+This function queries the Yelp Fusion API to search for businesses based on specified criteria, such as location and business type. It constructs a request with the provided parameters and fetches business data from Yelp.
+
+**Required Parameters**
+
+| Parameter       | Description                                                   | Default |
+|-----------------|---------------------------------------------------------------|---------|
+| `api_key`       | String containing the Yelp API key for authorization.         | NULL    |
+| `location`      | String specifying the location to search for businesses.      | NULL    |
+| `business_type` | String specifying the type of business (e.g., restaurants, bars). | NULL   |
+| `keyword`       | String specifying additional search keywords (e.g., "pizza", "coffee"). | NULL |
+| `offset`        | Integer specifying the offset for pagination.                 | 0       |
+| `limit`         | Integer specifying the maximum number of results to return (max is 50 as per Yelp API limits). | 50  |
+
+**Example Usage**
+
+```r
+api_key <- "<<<ENTER API KEY HERE>>>"
+business_list <- search_businesses(api_key, "San Francisco", "food", "pizza")
+```
+
+## create_word_cloud()
+
+To generate a word cloud visualization from Yelp business data, use the `create_word_cloud()` function. This function takes business data as input and produces a word cloud, where the size of each business name is determined by a weighted combination of its rating and the number of reviews. The function allows for the word cloud to be saved as an HTML file if desired.
+
+**Required Parameters**
+
+| Parameter      | Description                                                   | Default         |
+|----------------|---------------------------------------------------------------|-----------------|
+| `data`         | DataFrame containing Yelp business information.               | NULL            |
+| `save_to_file` | Boolean indicating whether to save the word cloud as an HTML file. | FALSE         |
+| `filename`     | String specifying the name of the file to save the word cloud to. | "wordcloud.html" |
+
+**Example Usage**
+
+```r
+# Assuming `business_data` is a DataFrame with Yelp business info
+create_word_cloud(business_data, TRUE, "my_wordcloud.html")
+```
+
+This function extracts the `name`, `rating`, and `review_count` from the input data to calculate weights for the word cloud. The weights are normalized to ensure a visually appealing distribution of word sizes. The word cloud can be customized in terms of size, color, and background color. If `save_to_file` is set to `TRUE`, the word cloud is saved to the specified filename; otherwise, it is printed directly in the R console.
