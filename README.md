@@ -5,9 +5,6 @@
 
 ##### ***The goal of YelpViz is to simplify the visualization process by retrieving business-related information using Yelp's API and providing plotted charts for analysis.***  
 
-> ```
-> Please ensure that you follow the instructions and refer to the vignette for more details.
-> ```
 ---
 ## Package Status & Installation  
 ![R Package: GitHub Action CI](https://github.com/kulaphongj/yelp_api_wrapper/actions/workflows/yelpviz.yml/badge.svg)  
