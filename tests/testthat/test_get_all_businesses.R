@@ -33,7 +33,7 @@ test_that("get_all_businesses returns a dataframe on success", {
 })
 
 test_that("get_all_businesses handles small total correctly", {
-  api_key <- 'your_real_api_key_here' # Use your real API key
+  api_key <- 'TpL2Xxv5ezpTSAxUUpuUIMLXM1fv0nFu9g3VyTUD_FhbkHG9OD322THyJSW_b30QMqRbvIdfqmLIDqTFNf7hxl-aXOcXzgii6H7_Wirdj5BOVniojDjRFpPEiyewZXYx'
   location <- "San Francisco"
   business_type <- "food"
   keyword <- "pizza"
@@ -44,5 +44,3 @@ test_that("get_all_businesses handles small total correctly", {
   # Check if the number of returned businesses does not exceed the requested total
   expect_true(nrow(result) <= total)
 })
-
-# Add more tests as needed, for example, to check handling of invalid parameters, handling of no results, etc.

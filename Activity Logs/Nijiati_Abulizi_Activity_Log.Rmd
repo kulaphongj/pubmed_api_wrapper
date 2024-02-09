@@ -9,34 +9,53 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
 
-**Jan 16:**
-- Explored various APIs.
+## January 16
+- Explored various APIs to identify potential data sources for our project.
 
-**Jan 18:**
-- Explored PubMed API.
+## January 18
+- Delved into the PubMed API to evaluate its functionality and data structures.
 
-**Jan 22:** 
-- Explored the CovidTracker API.
+## January 22
+- Tried the CovidTracker API, discussed its relevance and usefulness for our project.
 
-**Jan 24:** 
-- Explored the Yelp API.
-- Tested the Yelp API.
-- Brainstormed on R package ideas.
+## January 24
+- Explored the Yelp API, did initial tests to understand its capabilities.
+- Brainstormed ideas for R package features and functions, inspired by Yelp API's ease of use.
 
-**Jan 25:**
-- Worked on the project proposal (searchBusinesses and create word cloud).
+## January 25
+- Began drafting the project proposal, focusing on the `searchBusinesses` function and a feature to create word clouds from search results.
 
-**Jan 27-28:**
-- Worked on the SearchBusiness function.
-- Worked on the GetAllBusiness function.
-- Worked on the Create_Word_Cloud function.
+## January 27-28
+- Developed the `SearchBusiness` function.
+- Created the `GetAllBusiness` function, enabling comprehensive data retrieval.
+- Implemented the `Create_Word_Cloud` function, visualizing data in an engaging format.
 
-**Jan 29:**
-- Split the WordCloud creation function into 3 separate functions.
-- Worked on 2 main search functions and the word cloud creation function.
-- Started working on testing the word cloud creation function.
+## January 29
+- Refined the word cloud feature
+- Split one big function which searches and creates the word cloud into three separate functions for improved functionality.
+- Continued development and preliminary testing of the main search functions alongside the word cloud creation function.
+
+## February 1-2
+- Worked on unit testing, focusing of the search functions.
+- Transitioned from using `wordcloud` to `wordcloud2` for better visual presentation of data.
+- Conducted tests on the new word cloud creation function and started writing documentation (man files and vignettes).
+
+## February 5
+- Prepared presentation materials for the upcoming demonstration of our package.
+- Updated the GitHub repository with the latest code, documentation, and vignettes for each function I was responsible for.
+
+## February 6
+- Presented our R package, showing its functionality and features.
+- Worked on the unfinished parts of unit testing.
+- Continued working on the package documentation with detailed man files and vignettes.
+
+## February 7
+- Focused on updating the repository with the latest improvements and updates.
+- Began the process of finalizing our work, ensuring that all aspects of the package were polished and fully functional.
+
+
+
 
 
 

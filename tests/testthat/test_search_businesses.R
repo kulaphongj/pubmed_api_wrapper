@@ -23,7 +23,6 @@ test_that("search_businesses returns a list on success", {
   # Check if the result is a list (indicative of successful API response parsing)
   expect_true(is.list(result))
 
-  # Assuming that successful API calls return non-empty lists,
   # Check if the list contains elements (businesses)
   expect_gt(length(result), 0)
 })
@@ -39,5 +38,3 @@ test_that("search_businesses handles API errors gracefully", {
   # Check if the function returns NULL on error as expected
   expect_null(result)
 })
-
-
